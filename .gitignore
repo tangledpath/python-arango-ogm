@@ -1,0 +1,39 @@
+## MAC OS
+.DS_Store
+*.pem
+
+dist/**/*
+
+.idea
+
+.virtualenvs
+## 3rdparty:
+*.png
+.vscode
+.nova
+
+## Python
+__pycache__/
+
+## Build
+*.egg-info
+build
+
+## PROJECT::GENERAL
+log
+db.yaml
+*.csv*
+*.log
+pkg
+tmp
+*.svg
+scratch.*
+
+## Research:
+research/*.pdf
+research/**/*.zip
+.ipynb_checkpoints
+
+
+## DB
+dump/
