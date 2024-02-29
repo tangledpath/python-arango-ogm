@@ -1,22 +1,28 @@
-from glob import iglob
 import importlib, inspect
+import os
+from typing import Sequence, Type
+from dotenv import load_dotenv
+load_dotenv()
 
 class ModelDiscovery:
     def __init__(self, path: str = '.'):
-        self.path = path
+        self.models_module_name = os.getenv('PAO_MODELS')
+        if not self.models_module_name:
+            raise RuntimeError("PAO_MODELS must be defined in the environment (or a .env.test file)")
 
-    def discover(self):
-        models = []
-        print("Discovered models:")
-        for file in iglob("**/models.py", recursive=True):
-            print("Checking file: {}".format(file))
-            name = file.split(".")[0].replace("/", ".")
+    def discover(self) -> Sequence[Type]:
+        module = importlib.import_module(self.models_module_name)
+        models = [cls for _, cls in inspect.getmembers(module, inspect.isclass)]
 
-            print("Checking file: {} -> {}".format(file, name))
-            module = importlib.import_module(name)
-            for name, cls in inspect.getmembers(module, inspect.isclass):
-                models.append(cls)
-                print("member", name, cls)
-        return models
+        # Sort by line number; this is important as we should
+        # generate migrations in the defined order:
+        sorted_models = sorted(models, key=self.__get_model_line_num);
+
+        print('sorted_models', sorted_models)
+        return sorted_models
+
+    def __get_model_line_num(self, model):
+        _, line_num = inspect.getsourcelines(model)
+        return line_num
 
 

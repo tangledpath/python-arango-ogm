@@ -4,6 +4,10 @@ Python-based package implementing an ORM framework for arango; built on top of p
 ## Installation
 pip install python-arango-orm
 
+## Getting started
+Define path to models, either in the environment or a .env file 
+`PAO_MODELS=your_app.db.models`
+
 ## GitHub
 
 ## Documentation
