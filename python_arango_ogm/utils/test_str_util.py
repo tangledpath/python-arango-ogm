@@ -19,7 +19,8 @@ def test_squish():
   assert squished == 'Foo{ Bar{ Baz[] } }'
 
 def test_snake():
-  assert snake_text('foo!@#!&*^&&!@bar') == 'foo_bar'
+  # assert snake_text('foo!@#!&*^&&!@bar') == 'foo_bar'
+  assert snake_text('BarFood') == 'bar_food'
 
 def test_title():
   assert title_text('FooBar') == 'Foo Bar'

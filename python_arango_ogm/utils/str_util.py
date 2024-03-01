@@ -100,7 +100,7 @@ def surround(text: str, surround_with: SurroundEnum = SurroundEnum.PARENS):
 
 
 def surround_all(iterable: Iterable, surround_with: SurroundEnum = SurroundEnum.PARENS) -> Iterable:
-    return [quote(t, surround_with=surround_with) for t in iterable]
+    return [surround(t, surround_with=surround_with) for t in iterable]
 
 
 def squish_text(text, format_braces=True):
@@ -124,10 +124,15 @@ def combine_space(text):
 
 
 def snake_text(text, lower: bool = True):
+    def score_cap(txt: str, position:int):
+        return txt if not (txt.isupper() and position) else f"_{txt}"
     # Separate capitalized words:
-    txt = text.lower() if lower else text
-    terms = RE_NOT_ALPHNUM_STRICT.split(txt)
-    return SCORE.join(terms)
+    terms = RE_CAPITAL.split(text)
+    terms.remove('')
+
+    snaked = [score_cap(t, i) for i, t in enumerate(terms) if t]
+    txt = "".join(snaked)
+    return txt.lower() if lower else txt
 
 
 def capitalize_text(text):
