@@ -1,6 +1,7 @@
 from python_arango_ogm.db import model
 
 class MigrationModel(model.Model):
+    """ Built-in migration to track migrations. Internal use only. """
     LEVEL = model.LevelEnum.STRICT
     ADDITIONAL_PROPERTIES = False
     SCHEMA_NAME = "pao_migrations"

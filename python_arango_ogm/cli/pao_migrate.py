@@ -1,5 +1,6 @@
 import typer
 from datetime import datetime
+from python_arango_ogm.db.migration_builder import MigrationBuilder
 
 app = typer.Typer()
 
@@ -11,26 +12,36 @@ def down(db):
 """
 
 @app.command()
-def make_migration(name:str):
+def make_migrations():
     """
-    Make a new migration named using `name` as a suffix,
-    with a prefix of the current time.
+    Make migrations from models
+    """
+    migration_builder = MigrationBuilder()
+    migration_builder.create_model_migrations()
+
+
+@app.command()
+def new_migration(name: str):
+    """
+    Make a new migration with a new number prefix and suffix of given name
 
     @params:
         name is the suffix of the migration
     """
-    date_str = datetime.now().strftime('%Y%m%d%H%M%s')
-    mig_name = f"{date_str}_{name}"
-    with open(f"./migrations/{mig_name}.py", 'w') as mig_file:
-        mig_file.write(MIGRATION_FILE_TEMPLATE)
+    migration_builder = MigrationBuilder()
+    migration_builder.create_blank_migration(name)
 
-@app.command()
+@app.command(env=None)
 def migrate():
     """ Runs all unapplied migrations """
-    print(f"Hello")
+    # env_filename = f".env.{env}" if env else ".env"
+    # load_dotenv(env_filename)
+
 
 def run():
     app()
 
+
+run()
 if __name__ == "__main__":
-    run()
+    pass

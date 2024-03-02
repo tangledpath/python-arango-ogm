@@ -1,8 +1,8 @@
 import importlib, inspect
 import os
 from typing import Sequence, Type, Dict
-from dotenv import load_dotenv
-load_dotenv()
+
+from python_arango_ogm.db import model
 
 class ModelDiscovery:
     def __init__(self, path: str = '.'):
@@ -10,7 +10,7 @@ class ModelDiscovery:
         if not self.models_module_name:
             raise RuntimeError("PAO_MODELS must be defined in the environment (or a .env.test file)")
 
-    def discover(self) -> Dict[str, Type]:
+    def discover(self) -> Dict[str, type[model.Model]]:
         module = importlib.import_module(self.models_module_name)
         models = [cls for _, cls in inspect.getmembers(module, inspect.isclass)]
 

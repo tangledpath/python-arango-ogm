@@ -158,7 +158,7 @@ class Index:
         self.index_type = index_type
         self.name = name
         self.expiry_seconds = expiry_seconds
-
+        self.unique = unique
         if index_type == IndexTypeEnum.INVERTED and (len(fields) < 2 or not isinstance(fields, dict)):
             raise ValueError('INVERTED indexes must have at least 2 fields in a dictinoary.')
         elif index_type == IndexTypeEnum.TTL and expiry_seconds is None:
