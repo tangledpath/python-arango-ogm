@@ -61,7 +61,7 @@ SURROUND_TYPES = {
 }
 
 
-def indent(text, amount=1, pre=''):
+def indent(text, amount=4, pre=''):
     txt = f"{pre} {text}" if pre else str(text)
     return textwrap.indent(txt, INDENT * amount)
 

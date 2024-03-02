@@ -4,5 +4,5 @@ def test_simple_discovery():
     discovery = ModelDiscovery()
     models = discovery.discover()
 
-    assert FooModel in models
-    assert BarModel in models
+    assert FooModel in models.values()
+    assert BarModel in models.values()

@@ -172,7 +172,7 @@ def md_dataframe(df, heading=None, include_index: bool = False, render: bool = T
     else:
       return html
   else:
-    min_rows = len(df.index) + 2 if allrows else min(MIN_VISIBLE_ROWS, len(df.index) + 1)
+    min_rows = len(df.index_name) + 2 if allrows else min(MIN_VISIBLE_ROWS, len(df.index_name) + 1)
     widget = qgrid.show_grid(df, show_toolbar=False, grid_options=dict(
         forceFitColumns=False,
         syncColumnCellResize=True,

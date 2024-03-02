@@ -1,6 +1,7 @@
 from enum import StrEnum, auto
 from abc import ABC, abstractmethod
-from typing import Sequence, Dict
+from typing import Dict, Sequence, Union
+from python_arango_ogm.utils import str_util
 
 
 class FieldTypeEnum(StrEnum):
@@ -14,7 +15,7 @@ class FieldTypeEnum(StrEnum):
     STRING = auto()
 
 
-class IndexEnum(StrEnum):
+class IndexTypeEnum(StrEnum):
     """
     Field Type Enum, used to specify field type in certain situations:
     """
@@ -39,64 +40,85 @@ class Field(ABC):
     def __init__(
             self,
             field_type: FieldTypeEnum,
-            index: bool = False,
+            index_name: str = None,
             required: bool = False,
             unique: bool = False,
             minimum: float = None,
             maximum: float = None
     ):
+        if unique and not index_name:
+            raise ValueError(f"unique attribute requires an index_name for field {self.__class__.__name__}")
         self.field_type = field_type
-        self.index = index
+        self.index_name = index_name
         self.unique = unique
         self.required = required
         self.minimum = minimum
         self.maximum = maximum
 
     @abstractmethod
-    def build_schema_property(self) -> Dict[str, any]:
+    def build_schema_properties(self) -> Dict[str, any]:
         pass
 
 
 class FloatField(Field):
     def __init__(self,
-                 index: bool = False,
+                 index_name: str = None,
                  required: bool = False,
                  unique: bool = False,
                  minimum: float = None,
                  maximum: float = None):
-        super().__init__(FieldTypeEnum.FLOAT, index=index, unique=unique, required=required, minimum=minimum,
+        super().__init__(FieldTypeEnum.FLOAT, index_name=index_name, unique=unique, required=required, minimum=minimum,
                          maximum=maximum)
 
-    def build_schema_property(self) -> Dict[str, any]:
-        return {'type': 'number', 'minimum': self.minimum, 'maximum': self.maximum}
+    def build_schema_properties(self) -> Dict[str, any]:
+        props= {'type': 'number'}
+        if self.minimum is not None:
+            props['minimum'] = self.minimum
 
+        if self.maximum is not None:
+            props['maximum'] = self.maximum
+        return props
 
 class IntField(Field):
     def __init__(self,
-                 index: bool = False,
+                 index_name: str = None,
                  unique: bool = False,
                  required: bool = False,
                  minimum=None,
                  maximum=None):
-        super().__init__(FieldTypeEnum.INT, index=index, unique=unique, required=required, minimum=minimum,
+        super().__init__(FieldTypeEnum.INT, index_name=index_name, unique=unique, required=required, minimum=minimum,
                          maximum=maximum)
 
-    def build_schema_property(self) -> Dict[str, any]:
-        return {'type': 'number', 'multipleOf': 1, 'minimum': self.minimum, 'maximum': self.maximum}
+    def build_schema_properties(self) -> Dict[str, any]:
+        props = {'type': 'number', 'multipleOf': 1}
+        if self.minimum is not None:
+            props['minimum'] = self.minimum
+
+        if self.maximum is not None:
+            props['maximum'] = self.maximum
+
+        return props
 
 
 class StrField(Field):
     def __init__(self,
-                 index: bool = False,
+                 index_name: str = None,
                  unique: bool = False,
                  required: bool = False,
                  minimum=None,
                  maximum=None):
-        super().__init__(FieldTypeEnum.STRING, index=index, unique=unique, required=required, minimum=minimum,
+        super().__init__(FieldTypeEnum.STRING, index_name=index_name, unique=unique, required=required, minimum=minimum,
                          maximum=maximum)
 
-    def build_schema_property(self) -> Dict[str, any]:
-        return {'type': 'string', 'minimum': self.minimum, 'maximum': self.maximum}
+    def build_schema_properties(self) -> Dict[str, any]:
+        props = {'type': 'string'}
+        if self.minimum is not None:
+            props['minimum'] = self.minimum
+
+        if self.maximum is not None:
+            props['maximum'] = self.maximum
+
+        return props
 
 
 class ArrayField(Field):
@@ -106,7 +128,7 @@ class ArrayField(Field):
         self.maximum = maximum
         super().__init__(FieldTypeEnum.ARRAY, required=required)
 
-    def build_schema_property(self) -> Dict[str, any]:
+    def build_schema_properties(self) -> Dict[str, any]:
         inner_field_type = 'number' if self.array_type in [FieldTypeEnum.INT, FieldTypeEnum.FLOAT] else 'string'
 
         schema = {
@@ -131,15 +153,15 @@ class EdgeTo:
 
 
 class Index:
-    def __init__(self, fields: [str], index_type: IndexEnum, name=None, expiry_seconds=None):
+    def __init__(self, fields: Union[Sequence[str], dict[str: any]], index_type: IndexTypeEnum, name, unique=False, expiry_seconds=None):
         self.fields = fields
         self.index_type = index_type
         self.name = name
         self.expiry_seconds = expiry_seconds
 
-        if index_type == IndexEnum.INVERTED and len(fields) < 2:
-            raise ValueError('INVERTED indexes must have at least 2 fields')
-        elif index_type == IndexEnum.TTL and expiry_seconds is None:
+        if index_type == IndexTypeEnum.INVERTED and (len(fields) < 2 or not isinstance(fields, dict)):
+            raise ValueError('INVERTED indexes must have at least 2 fields in a dictinoary.')
+        elif index_type == IndexTypeEnum.TTL and expiry_seconds is None:
             raise ValueError('TTL indexes must also have expiry seconds')
 
 
@@ -161,3 +183,11 @@ class Model(ABC):
     def getFields(cls) -> Sequence:
         model_fields = [f for f in dir(cls) if cls.is_field(f)]
         return model_fields
+
+    @classmethod
+    def collection_name(cls) -> str:
+        if cls.SCHEMA_NAME:
+            coll_name = cls.SCHEMA_NAME
+        else:
+            coll_name = str_util.snake_text(cls.__name__.split('Model')[0])
+        return coll_name
