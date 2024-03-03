@@ -1,6 +1,12 @@
 # Python Arango OGM
 Python-based package implementing an OGM framework for arango; built on top of python-arango.
 
+## GitHub
+https://github.com/tangledpath/python-arango-ogm
+
+## Documentation
+https://tangledpath.github.io/python-arango-ogm/python_arango_ogm.html
+
 ## Installation
 pip install python-arango-ogm
 
@@ -53,14 +59,6 @@ class BazModel(model.Model):
 ### In code
 You may use your models to perform various queries and commands
 **TODO**: document this more
-
-## GitHub
-https://github.com/tangledpath/python-arango-ogm
-
-## Documentation
-https://tangledpath.github.io/python-arango-ogm/python_arango_ogm.html
-
-
 
 ## Development
 ### Linting
