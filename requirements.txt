@@ -1,0 +1,4 @@
+python-dotenv~=1.0.1
+typer~=0.9.0
+pygments~=2.17.2
+pytest~=8.0.2

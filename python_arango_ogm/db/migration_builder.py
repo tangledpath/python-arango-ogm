@@ -16,9 +16,7 @@ def down(db):
     {migration_down}
 """
 
-INDENT = "    "
-
-
+INDENT = ' ' * 4
 class MigrationBuilder:
     ADD_HASH_INDEX_STR = "{indent}{coll_var}.add_hash_index(name='{idx_name}', fields={fields}, unique={unique})"
     ADD_TTL_INDEX_STR = "{indent}{coll_var}.add_ttl_index({fields}, name='{idx_name}', expiry_time={expiry_time}"
