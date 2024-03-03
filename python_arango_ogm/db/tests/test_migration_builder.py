@@ -23,4 +23,4 @@ def test_simple_migration_builder():
 
 if __name__ == '__main__':
     test_simple_migration_builder()
-    
+

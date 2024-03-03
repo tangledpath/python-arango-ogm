@@ -5,8 +5,54 @@ Python-based package implementing an OGM framework for arango; built on top of p
 pip install python-arango-ogm
 
 ## Getting started
-Define path to models, either in the environment or a .env file 
-`PAO_MODELS=your_app.db.models`
+Create a .env file at the root of your repository with the following keys; values to be adjusted for your application: 
+```
+PAO_MODELS=yourapp.db.models
+PAO_GRAPH_NAME=yourapp
+PAO_DB_NAME=yourapp
+PAO_DB_HOST=localhost
+PAO_DB_PORT=8529
+PAO_DB_ROOT_USER=root
+PAO_DB_ROOT_PASS=<ARANGO_ROOT_PASSWORD>
+PAO_DB_USER=yourapp 
+PAO_DB_PASS=<ARANGO_yourapp_PASSWORD>
+PAO_APP_PACKAGE=yourapp.db
+```
+
+In this setup, there should be a `models.py` in the yourapp.db package.  For example:
+```python
+from python_arango_ogm.db import model
+
+
+class FooModel(model.Model):
+    field_int = model.IntField(index_name='field_int_idx')
+    field_str = model.StrField(unique=True, index_name='field_str_idx')
+    bar_edge = model.EdgeTo("BarModel")
+
+class BarModel(model.Model):
+    field_int = model.IntField(index_name='field_int_idx', required=True)
+    field_str = model.StrField(unique=True, index_name='field_str_idx')
+
+class BazModel(model.Model):
+    field_int = model.IntField(index_name='field_int_idx', unique=True, required=True)
+    field_str = model.StrField(index_name='field_str_idx')
+    foo_edge = model.EdgeTo(FooModel)
+```
+
+## Usage:
+### pao-migrate CLI
+* Make uncreated migrations for models: `pao-migrate make-migrations`
+* Migrate the database: `pao-migrate migrate`
+* Remove and Migrate the database: `pao-migrate migrate --clean`
+* List migrations: `pao-migrate list-migrations`
+* Rollback last migration: `pao-migrate migrate-rollback`
+* Create a blank migration: `pao-migrate new-migration <MIGRATION_NAME>`
+* To see help `pao-migrate --help`
+* To see help for a specific command, for example: `pao-migrate migrate --help`
+
+### In code
+You may use your models to perform various queries and commands
+**TODO**: document this more
 
 ## GitHub
 https://github.com/tangledpath/python-arango-ogm
@@ -14,8 +60,7 @@ https://github.com/tangledpath/python-arango-ogm
 ## Documentation
 https://tangledpath.github.io/python-arango-ogm/python_arango_ogm.html
 
-## Usage
-TODO:
+
 
 ## Development
 ### Linting

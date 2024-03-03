@@ -1,3 +1,4 @@
+import json
 import os
 import site
 import sys
@@ -8,7 +9,6 @@ import typer
 from python_arango_ogm.db.migration_builder import MigrationBuilder
 from python_arango_ogm.db.pao_database import PAODatabase
 from python_arango_ogm.db.pao_migrator import PAOMigrator
-
 
 print("LOADING DOTENV FROM ", os.getcwd())
 app_root = os.getcwd()
@@ -46,7 +46,7 @@ def migrate(clean:bool=False):
     migrator.apply_migrations()
 
 @app.command()
-def migrate_down():
+def migrate_rollback():
     """ Runs all unapplied migrations """
     pao_db = PAODatabase()
     migrator = PAOMigrator(pao_db, app_root)
@@ -58,7 +58,8 @@ def list_migrations():
     """ Runs all unapplied migrations """
     pao_db = PAODatabase()
     migrator = PAOMigrator(pao_db, app_root)
-    print(migrator.list_migrations())
+    migrations = migrator.list_migrations()
+    print(json.dumps(migrations, indent=4))
 
 def run():
     app()
