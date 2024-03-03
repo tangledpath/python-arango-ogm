@@ -1,17 +1,18 @@
-# Python Arango ORM
-Python-based package implementing an ORM framework for arango; built on top of python-arango.
+# Python Arango OGM
+Python-based package implementing an OGM framework for arango; built on top of python-arango.
 
 ## Installation
-pip install python-arango-orm
+pip install python-arango-ogm
 
 ## Getting started
 Define path to models, either in the environment or a .env file 
 `PAO_MODELS=your_app.db.models`
 
 ## GitHub
+https://github.com/tangledpath/python-arango-ogm
 
 ## Documentation
-
+https://tangledpath.github.io/python-arango-ogm/python_arango_ogm.html
 
 ## Usage
 TODO:

@@ -1,9 +1,8 @@
 from enum import StrEnum, auto
 from abc import ABC, abstractmethod
 from typing import Dict, Sequence, Union
+
 from python_arango_ogm.utils import str_util
-
-
 class FieldTypeEnum(StrEnum):
     """
     Field Type Enum, used to specify field type in certain situations:
@@ -169,6 +168,7 @@ class Model(ABC):
     LEVEL = LevelEnum.STRICT
     ADDITIONAL_PROPERTIES = False
     SCHEMA_NAME = None
+    db = None # :PAODatabase (or TODO:interface)
 
     def __init__(self):
         super().__init__()
@@ -178,6 +178,14 @@ class Model(ABC):
         attr = getattr(cls, attribute_name)
         return ((not attribute_name.startswith('_')) and
                 (issubclass(type(attr), Field) or issubclass(type(attr), EdgeTo)))
+
+    @classmethod
+    def all(cls, sort_fields:Dict[str, str]) -> str:
+        return cls.db.get_by_attributes(cls.collection_name(), sort_key_dict=sort_fields)
+
+    @classmethod
+    def remove_by_key(cls, key):
+        cls.db.remove_by_key(cls.collection_name(), key)
 
     @classmethod
     def getFields(cls) -> Sequence:

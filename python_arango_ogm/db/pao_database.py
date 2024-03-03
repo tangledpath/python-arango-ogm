@@ -4,10 +4,15 @@ import uuid
 
 from arango import ArangoClient
 
+from python_arango_ogm.db.model_discovery import ModelDiscovery
 from python_arango_ogm.db.pao_queries import PAOQueries
+from python_arango_ogm.db.migration_model import MigrationModel
+from python_arango_ogm.utils.logger import logging
 
 
 class PAODatabase:
+    VALID_SORT_VALUES = ["ASC", "DESC", ""]
+
     def __init__(self, delete_db: bool = False):
         # TODO: These probably don't need to be members:
         self.db_name = os.getenv('PAO_DB_NAME')
@@ -35,7 +40,7 @@ class PAODatabase:
 
         # Connect to "_system" database as root user.
         # This returns an API wrapper for "_system" database.
-        print(f"Connecting to system DB with {self.root_user}:{root_password}...")
+        # logging.debug(f"Connecting to system DB with {self.root_user}:{root_password}...")
         sys_db = self.client.db('_system', username=self.root_user, password=root_password)
 
         # Create a new database named "test" if it does not exist.
@@ -55,6 +60,17 @@ class PAODatabase:
                 raise ValueError(f"Database {self.db_name} was not created.")
 
         self.db = self.client.db(self.db_name, username=self.username, password=password)
+        self.inject_into_models()
+
+    def inject_into_models(self):
+        discoverer = ModelDiscovery()
+        model_hash: Dict[str, any] = discoverer.discover()
+        for m, model in model_hash.items():
+            logging.debug(f"Injecting DB into model {m}")
+            model.db = self
+
+        # Inject into built-in models:
+        MigrationModel.db = self
 
     def get_db(self):
         return self.db
@@ -73,43 +89,54 @@ class PAODatabase:
         lookup_filter = self._format_lookup_filter(lookup_key_dict)
         aql = PAOQueries.AQL_QUERY_RELATED.format(lookup_filter=lookup_filter)
         edge_collection_name = f"{collection_name}__{association_collection_name}"
-        print("Association query", aql, collection_name, association_collection_name, edge_collection_name)
-        return self.db.aql.execute(aql, count=True, batch_size=10, bind_vars={
+        logging.debug(f"Association query on [{collection_name}]->[{edge_collection_name}] [aql]")
+        cursor = self.db.aql.execute(aql, count=True, batch_size=10, bind_vars={
             '@collection': collection_name,
             '@edge_collection': edge_collection_name,
             '@association_collection': association_collection_name
         })
 
-    def _format_lookup_filter(self, lookup_key_dict: Dict):
-        """
-          Format a lookup filter from keys and values in lookup_key_dict
-          Returns string in format "doc.active == true AND doc.gender == 'f'"
-        """
-        attrs = {f"doc.{k} == {self._format_query_value(str(v))}" for (k, v) in lookup_key_dict.items()}
-        return " AND ".join(attrs)
+        return self._cursor_doc_generator(cursor)
 
-    def find_by_attributes(self, collection_name: str, lookup_key_dict: Dict):
+    def find_by_attributes(self, collection_name: str, lookup_key_dict: Dict = None):
         """
           Find a single document by given collection_name,
           looking up by the keys and values in lookup_key_dict:
         """
         docs = self.get_by_attributes(collection_name, lookup_key_dict)
-        result = None
-        if docs.count():
-            result = docs.next()
+        try:
+            result = docs.__next__()
+        except StopIteration:
+            result = None
 
         return result
 
-    def get_by_attributes(self, collection_name: str, lookup_key_dict: Dict):
+    def remove_by_key(self, collection_name: str, key: str):
+        lookup_filter = self._format_lookup_filter({"_key": key})
+        aql = PAOQueries.AQL_REMOVE_BY_ATTRS.format(lookup_filter=lookup_filter)
+
+        logging.debug(f"REMOVE query: [{aql}]")
+        cursor = self.db.aql.execute(aql, count=True, bind_vars={'@collection': collection_name})
+        return self._cursor_doc_generator(cursor)
+
+    def get_by_attributes(
+            self,
+            collection_name: str,
+            lookup_key_dict: Dict = None,
+            sort_key_dict: Dict[str, str] = None
+    ):
         """
           Gets document associations (association_collection_name) from given collection_name,
-          looking up by the keys and values in lookup_key_dict:
+          looking up by the keys and values in lookup_key_dict, sorting by keys and direction
+          values (ASC, DESC):
         """
-        print("lookuip key dict", lookup_key_dict)
+        logging.debug(f"LOOKUP:{lookup_key_dict} and SORT:{sort_key_dict}")
         lookup_filter = self._format_lookup_filter(lookup_key_dict)
-        aql = PAOQueries.AQL_QUERY_BY_ATTRS.format(lookup_filter=lookup_filter)
-        print("LOOKUP query", aql)
-        return self.db.aql.execute(aql, count=True, bind_vars={'@collection': collection_name})
+        sort_by = self._format_sort(sort_key_dict)
+        aql = PAOQueries.AQL_QUERY_BY_ATTRS.format(lookup_filter=lookup_filter, sort_by=sort_by)
+        logging.debug(f"LOOKUP query: {aql}")
+        cursor = self.db.aql.execute(aql, count=True, bind_vars={'@collection': collection_name})
+        return self._cursor_doc_generator(cursor)
 
     def insert_edge(self, collection_name: str, association_collection_name: str, from_key, to_key):
         """
@@ -130,9 +157,9 @@ class PAODatabase:
         new_doc = self.__autogen_keys(collection_name, doc)
         insert_attrs = self._format_query_attrs(new_doc)
         aql = PAOQueries.AQL_INSERT_DOC.format(insert_attrs=insert_attrs)
-        print("INSERT QUERY", aql)
+        logging.debug(f"INSERT QUERY: aql")
         inserted_docs = self.db.aql.execute(aql, count=True, bind_vars={'@collection': collection_name})
-        print("inserted_docs", inserted_docs)
+        logging.debug(f"inserted_docs: {inserted_docs.count()}")
         if not inserted_docs.count():
             raise RuntimeError(f"Error: collection_name document {doc} was not inserted.")
 
@@ -170,22 +197,51 @@ class PAODatabase:
         insert_attrs = self._format_query_attrs(new_doc)  # str(new_doc)[1:-1]
         update_attrs = self._format_query_attrs(update_doc)  # str(update_doc)[1:-1]
 
-        print(f"key_attrs: {key_attrs}")
-        print(f"insert_attrs: {insert_attrs}")
-        print(f"update_attrs: {update_attrs}")
+        logging.debug(f"key_attrs: {key_attrs}")
+        logging.debug(f"insert_attrs: {insert_attrs}")
+        logging.debug(f"update_attrs: {update_attrs}")
 
         upsert = PAOQueries.AQL_UPSERT_DOC.format(
             key_attrs=key_attrs,
             insert_attrs=insert_attrs,
             update_attrs=update_attrs)
 
-        print("UPSERT QUERY", upsert)
+        logging.debug(f"UPSERT QUERY: {upsert}")
         upserted_docs = self.db.aql.execute(upsert, count=True, bind_vars={'@collection': collection_name})
-        print("upserted_docs", upserted_docs)
+        logging.debug(f"upserted_docs: {upserted_docs.count()}")
         if not upserted_docs.count():
             raise RuntimeError(f"Error: collection_name document {doc} was not upserted.")
 
         return upserted_docs.next()
+
+    def _format_sort(self, sort_list: Dict[str, str]) -> str:
+        """
+          Format a lookup filter from keys and values in lookup_key_dict
+          Returns string in format "doc.active == true AND doc.gender == 'f'"
+        """
+        result = ''
+        if sort_list and len(sort_list):
+            sorts = []
+            for k, v in sort_list.items():
+                if v not in self.VALID_SORT_VALUES:
+                    raise ValueError(f"Sort value for {k} is should be one of {self.VALID_SORT_VALUES}")
+                sorts.append(f"doc.{k} {v}")
+
+            sort_by = " ,".join(sorts)
+            result = f"SORT {sort_by}" if sort_by else ""
+        return result
+
+    def _format_lookup_filter(self, lookup_key_dict: Dict):
+        """
+          Format a lookup filter from keys and values in lookup_key_dict
+          Returns string in format "doc.active == true AND doc.gender == 'f'"
+        """
+        result = ''
+        if lookup_key_dict and len(lookup_key_dict) > 0:
+            attrs = {f"doc.{k} == {self._format_query_value(str(v))}" for (k, v) in lookup_key_dict.items()}
+            filter_by = " AND ".join(attrs)
+            result = f"FILTER {filter_by}" if filter_by else ""
+        return result
 
     def _format_query_attrs(self, doc: Dict) -> str:
         """
@@ -195,6 +251,15 @@ class PAODatabase:
         """
         attrs = {f"'{k}': {self._format_query_value(str(v))}" for (k, v) in doc.items()}
         return ", ".join(attrs)
+
+    def _cursor_doc_generator(self, cursor):
+        while True:
+            # batch_items = cursor.batch()
+            # logging.debug(f"batch_items", batch_items)
+            for doc in cursor.batch():
+                yield (doc)
+            if not cursor.has_more(): break
+            cursor.next()
 
     @staticmethod
     def _format_query_value(value: str):

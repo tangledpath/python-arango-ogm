@@ -28,8 +28,14 @@ class MigrationBuilder:
         if not self.models_module_name:
             raise RuntimeError("PAO_MODELS must be defined in the environment (or a .env.test file)")
 
-        p = Path(self.target_path)
+        app_package = os.getenv('PAO_APP_PACKAGE')
+        if not app_package:
+            raise RuntimeError("PAO_APP_PACKAGE must be defined in the environment (or a .env.test file)")
+        app_root = app_package.replace('.', '/')
+        p = Path(self.target_path).joinpath(app_root)
         self.migration_pathname = p.joinpath("migrations")
+
+        print("MIGRATION_PATHNAME:", self.migration_pathname)
         if not self.migration_pathname.exists(follow_symlinks=False):
             self.migration_pathname.mkdir()
 

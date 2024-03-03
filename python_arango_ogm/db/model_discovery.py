@@ -5,12 +5,13 @@ from typing import Sequence, Type, Dict
 from python_arango_ogm.db import model
 
 class ModelDiscovery:
-    def __init__(self, path: str = '.'):
+    def __init__(self):
         self.models_module_name = os.getenv('PAO_MODELS')
         if not self.models_module_name:
             raise RuntimeError("PAO_MODELS must be defined in the environment (or a .env.test file)")
 
     def discover(self) -> Dict[str, type[model.Model]]:
+        print("IMPORTING MODELS MODULE FROM", self.models_module_name)
         module = importlib.import_module(self.models_module_name)
         models = [cls for _, cls in inspect.getmembers(module, inspect.isclass)]
 

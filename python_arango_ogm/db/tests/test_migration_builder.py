@@ -3,8 +3,10 @@ import shutil
 
 from python_arango_ogm.db.migration_builder import MigrationBuilder
 
-def test_simple_migrator():
-    mig_path = pathlib.Path(__file__).parent.resolve()
+mig_path = pathlib.Path(__file__).parent.parent.parent.parent.resolve()
+print("MIGRATION PATH:", mig_path)
+
+def test_simple_migration_builder():
     migrator_builder = MigrationBuilder(mig_path)
 
     try:
@@ -19,3 +21,6 @@ def test_simple_migrator():
         shutil.rmtree(migrator_builder.migration_pathname)
 
 
+if __name__ == '__main__':
+    test_simple_migration_builder()
+    
