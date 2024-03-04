@@ -1,5 +1,5 @@
 # Python Arango OGM
-Python-based package implementing an OGM (Object Graph Model) framework for arango; built on top of python-arango.  
+Python-based package implementing an OGM (Object Graph Model) framework for arango; built on top of [python-arango]([url](https://github.com/arangodb/python-arango/)).  
 **N.B.** This is extracted from a project that uses Arango heavily.  Obviously, with a graph database, you don't want to be tied too closely to an ORM due to the impedance mismatch between models and graph nodes and edges.  Still to do is to marshall query results into models when necessary for that good old model experience.  That will be done in the coming week(s).  
 
 ## GitHub
