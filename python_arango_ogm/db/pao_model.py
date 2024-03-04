@@ -147,7 +147,7 @@ class ArrayField(Field):
 
 
 class EdgeTo:
-    def __init__(self, to_model: ['Model', str]):
+    def __init__(self, to_model: ['PAOModel', str]):
         self.to_model = to_model
 
 
@@ -164,7 +164,7 @@ class Index:
             raise ValueError('TTL indexes must also have expiry seconds')
 
 
-class Model(ABC):
+class PAOModel(ABC):
     LEVEL = LevelEnum.STRICT
     ADDITIONAL_PROPERTIES = False
     SCHEMA_NAME = None
@@ -197,5 +197,5 @@ class Model(ABC):
         if cls.SCHEMA_NAME:
             coll_name = cls.SCHEMA_NAME
         else:
-            coll_name = str_util.snake_text(cls.__name__.split('Model')[0])
+            coll_name = str_util.snake_text(cls.__name__.split('PAOModel')[0])
         return coll_name

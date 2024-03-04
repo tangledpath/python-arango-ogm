@@ -63,14 +63,14 @@
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">import</span> <span class="nn">pathlib</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">import</span> <span class="nn">shutil</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span> <span class="nn">python_arango_ogm.db.migration_builder</span> <span class="kn">import</span> <span class="n">MigrationBuilder</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span> <span class="nn">python_arango_ogm.db.pao_migration_builder</span> <span class="kn">import</span> <span class="n">PAOMigrationBuilder</span>
 </span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span> <span class="nn">python_arango_ogm.db.pao_database</span> <span class="kn">import</span> <span class="n">PAODatabase</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span> <span class="nn">python_arango_ogm.db.pao_migrator</span> <span class="kn">import</span> <span class="n">PAOMigrator</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="n">mig_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MIGRATION PATH:&quot;</span><span class="p">,</span> <span class="n">mig_path</span><span class="p">)</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="k">def</span> <span class="nf">test_simple_migrator</span><span class="p">():</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">migrator_builder</span> <span class="o">=</span> <span class="n">MigrationBuilder</span><span class="p">(</span><span class="n">mig_path</span><span class="p">)</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">migrator_builder</span> <span class="o">=</span> <span class="n">PAOMigrationBuilder</span><span class="p">(</span><span class="n">mig_path</span><span class="p">)</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
 </span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="k">try</span><span class="p">:</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>        <span class="n">migrator_builder</span><span class="o">.</span><span class="n">create_model_migrations</span><span class="p">()</span>
@@ -84,7 +84,7 @@
 </span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">migrator_builder</span><span class="o">.</span><span class="n">migration_pathname</span><span class="p">)</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
 </span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="k">def</span> <span class="nf">test_migrator_idempotency</span><span class="p">():</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="n">migrator_builder</span> <span class="o">=</span> <span class="n">MigrationBuilder</span><span class="p">(</span><span class="n">mig_path</span><span class="p">)</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="n">migrator_builder</span> <span class="o">=</span> <span class="n">PAOMigrationBuilder</span><span class="p">(</span><span class="n">mig_path</span><span class="p">)</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="k">try</span><span class="p">:</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>        <span class="n">migrator_builder</span><span class="o">.</span><span class="n">create_model_migrations</span><span class="p">()</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>        <span class="n">pao_database</span> <span class="o">=</span> <span class="n">PAODatabase</span><span class="p">(</span><span class="n">delete_db</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -134,7 +134,7 @@
     </div>
     <a class="headerlink" href="#test_simple_migrator"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="test_simple_migrator-11"><a href="#test_simple_migrator-11"><span class="linenos">11</span></a><span class="k">def</span> <span class="nf">test_simple_migrator</span><span class="p">():</span>
-</span><span id="test_simple_migrator-12"><a href="#test_simple_migrator-12"><span class="linenos">12</span></a>    <span class="n">migrator_builder</span> <span class="o">=</span> <span class="n">MigrationBuilder</span><span class="p">(</span><span class="n">mig_path</span><span class="p">)</span>
+</span><span id="test_simple_migrator-12"><a href="#test_simple_migrator-12"><span class="linenos">12</span></a>    <span class="n">migrator_builder</span> <span class="o">=</span> <span class="n">PAOMigrationBuilder</span><span class="p">(</span><span class="n">mig_path</span><span class="p">)</span>
 </span><span id="test_simple_migrator-13"><a href="#test_simple_migrator-13"><span class="linenos">13</span></a>
 </span><span id="test_simple_migrator-14"><a href="#test_simple_migrator-14"><span class="linenos">14</span></a>    <span class="k">try</span><span class="p">:</span>
 </span><span id="test_simple_migrator-15"><a href="#test_simple_migrator-15"><span class="linenos">15</span></a>        <span class="n">migrator_builder</span><span class="o">.</span><span class="n">create_model_migrations</span><span class="p">()</span>
@@ -164,7 +164,7 @@
     </div>
     <a class="headerlink" href="#test_migrator_idempotency"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="test_migrator_idempotency-25"><a href="#test_migrator_idempotency-25"><span class="linenos">25</span></a><span class="k">def</span> <span class="nf">test_migrator_idempotency</span><span class="p">():</span>
-</span><span id="test_migrator_idempotency-26"><a href="#test_migrator_idempotency-26"><span class="linenos">26</span></a>    <span class="n">migrator_builder</span> <span class="o">=</span> <span class="n">MigrationBuilder</span><span class="p">(</span><span class="n">mig_path</span><span class="p">)</span>
+</span><span id="test_migrator_idempotency-26"><a href="#test_migrator_idempotency-26"><span class="linenos">26</span></a>    <span class="n">migrator_builder</span> <span class="o">=</span> <span class="n">PAOMigrationBuilder</span><span class="p">(</span><span class="n">mig_path</span><span class="p">)</span>
 </span><span id="test_migrator_idempotency-27"><a href="#test_migrator_idempotency-27"><span class="linenos">27</span></a>    <span class="k">try</span><span class="p">:</span>
 </span><span id="test_migrator_idempotency-28"><a href="#test_migrator_idempotency-28"><span class="linenos">28</span></a>        <span class="n">migrator_builder</span><span class="o">.</span><span class="n">create_model_migrations</span><span class="p">()</span>
 </span><span id="test_migrator_idempotency-29"><a href="#test_migrator_idempotency-29"><span class="linenos">29</span></a>        <span class="n">pao_database</span> <span class="o">=</span> <span class="n">PAODatabase</span><span class="p">(</span><span class="n">delete_db</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>

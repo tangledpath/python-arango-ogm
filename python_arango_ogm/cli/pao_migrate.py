@@ -6,7 +6,7 @@ import sys
 from dotenv import load_dotenv
 import typer
 
-from python_arango_ogm.db.migration_builder import MigrationBuilder
+from python_arango_ogm.db.pao_migration_builder import PAOMigrationBuilder
 from python_arango_ogm.db.pao_database import PAODatabase
 from python_arango_ogm.db.pao_migrator import PAOMigrator
 
@@ -23,7 +23,7 @@ def make_migrations():
     """
     Make migrations from models
     """
-    migration_builder = MigrationBuilder(app_root)
+    migration_builder = PAOMigrationBuilder(app_root)
     migration_builder.create_model_migrations()
 
 @app.command()
@@ -34,7 +34,7 @@ def new_migration(name: str):
     @params:
         name is the suffix of the migration
     """
-    migration_builder = MigrationBuilder(app_root)
+    migration_builder = PAOMigrationBuilder(app_root)
     migration_builder.create_blank_migration(name)
 
 

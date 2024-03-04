@@ -93,22 +93,22 @@
 
                         <label class="view-source-button" for="mod-models-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span> <span class="nn">python_arango_ogm.db</span> <span class="kn">import</span> <span class="n">model</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span> <span class="nn">python_arango_ogm.db</span> <span class="kn">import</span> <span class="n">pao_model</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="k">class</span> <span class="nc">FooModel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>    <span class="n">field_int</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_int_idx&#39;</span><span class="p">)</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>    <span class="n">field_str</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_str_idx&#39;</span><span class="p">)</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>    <span class="n">bar_edge</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">EdgeTo</span><span class="p">(</span><span class="s2">&quot;BarModel&quot;</span><span class="p">)</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="k">class</span> <span class="nc">FooModel</span><span class="p">(</span><span class="n">pao_model</span><span class="o">.</span><span class="n">PAOModel</span><span class="p">):</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>    <span class="n">field_int</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_int_idx&#39;</span><span class="p">)</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>    <span class="n">field_str</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_str_idx&#39;</span><span class="p">)</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>    <span class="n">bar_edge</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">EdgeTo</span><span class="p">(</span><span class="s2">&quot;BarModel&quot;</span><span class="p">)</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="k">class</span> <span class="nc">BarModel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="n">field_int</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_int_idx&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">field_str</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_str_idx&#39;</span><span class="p">)</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="k">class</span> <span class="nc">BarModel</span><span class="p">(</span><span class="n">pao_model</span><span class="o">.</span><span class="n">PAOModel</span><span class="p">):</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="n">field_int</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_int_idx&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">field_str</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_str_idx&#39;</span><span class="p">)</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="k">class</span> <span class="nc">BazModel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="n">field_int</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_int_idx&#39;</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">field_str</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_str_idx&#39;</span><span class="p">)</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="n">foo_edge</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">EdgeTo</span><span class="p">(</span><span class="n">FooModel</span><span class="p">)</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="k">class</span> <span class="nc">BazModel</span><span class="p">(</span><span class="n">pao_model</span><span class="o">.</span><span class="n">PAOModel</span><span class="p">):</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="n">field_int</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_int_idx&#39;</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">field_str</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_str_idx&#39;</span><span class="p">)</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="n">foo_edge</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">EdgeTo</span><span class="p">(</span><span class="n">FooModel</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -118,16 +118,16 @@
 <div class="attr class">
             
     <span class="def">class</span>
-    <span class="name">FooModel</span><wbr>(<span class="base"><a href="../model.html#Model">python_arango_ogm.db.model.Model</a></span>):
+    <span class="name">FooModel</span><wbr>(<span class="base"><a href="../pao_model.html#PAOModel">python_arango_ogm.db.pao_model.PAOModel</a></span>):
 
                 <label class="view-source-button" for="FooModel-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#FooModel"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FooModel-5"><a href="#FooModel-5"><span class="linenos">5</span></a><span class="k">class</span> <span class="nc">FooModel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-</span><span id="FooModel-6"><a href="#FooModel-6"><span class="linenos">6</span></a>    <span class="n">field_int</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_int_idx&#39;</span><span class="p">)</span>
-</span><span id="FooModel-7"><a href="#FooModel-7"><span class="linenos">7</span></a>    <span class="n">field_str</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_str_idx&#39;</span><span class="p">)</span>
-</span><span id="FooModel-8"><a href="#FooModel-8"><span class="linenos">8</span></a>    <span class="n">bar_edge</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">EdgeTo</span><span class="p">(</span><span class="s2">&quot;BarModel&quot;</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FooModel-5"><a href="#FooModel-5"><span class="linenos">5</span></a><span class="k">class</span> <span class="nc">FooModel</span><span class="p">(</span><span class="n">pao_model</span><span class="o">.</span><span class="n">PAOModel</span><span class="p">):</span>
+</span><span id="FooModel-6"><a href="#FooModel-6"><span class="linenos">6</span></a>    <span class="n">field_int</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_int_idx&#39;</span><span class="p">)</span>
+</span><span id="FooModel-7"><a href="#FooModel-7"><span class="linenos">7</span></a>    <span class="n">field_str</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_str_idx&#39;</span><span class="p">)</span>
+</span><span id="FooModel-8"><a href="#FooModel-8"><span class="linenos">8</span></a>    <span class="n">bar_edge</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">EdgeTo</span><span class="p">(</span><span class="s2">&quot;BarModel&quot;</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -139,7 +139,7 @@ inheritance.</p>
                             <div id="FooModel.field_int" class="classattr">
                                 <div class="attr variable">
             <span class="name">field_int</span>        =
-<span class="default_value">&lt;<a href="../model.html#IntField">python_arango_ogm.db.model.IntField</a> object&gt;</span>
+<span class="default_value">&lt;<a href="../pao_model.html#IntField">python_arango_ogm.db.pao_model.IntField</a> object&gt;</span>
 
         
     </div>
@@ -151,7 +151,7 @@ inheritance.</p>
                             <div id="FooModel.field_str" class="classattr">
                                 <div class="attr variable">
             <span class="name">field_str</span>        =
-<span class="default_value">&lt;<a href="../model.html#StrField">python_arango_ogm.db.model.StrField</a> object&gt;</span>
+<span class="default_value">&lt;<a href="../pao_model.html#StrField">python_arango_ogm.db.pao_model.StrField</a> object&gt;</span>
 
         
     </div>
@@ -163,7 +163,7 @@ inheritance.</p>
                             <div id="FooModel.bar_edge" class="classattr">
                                 <div class="attr variable">
             <span class="name">bar_edge</span>        =
-<span class="default_value">&lt;<a href="../model.html#EdgeTo">python_arango_ogm.db.model.EdgeTo</a> object&gt;</span>
+<span class="default_value">&lt;<a href="../pao_model.html#EdgeTo">python_arango_ogm.db.pao_model.EdgeTo</a> object&gt;</span>
 
         
     </div>
@@ -175,16 +175,16 @@ inheritance.</p>
                             <div class="inherited">
                                 <h5>Inherited Members</h5>
                                 <dl>
-                                    <div><dt><a href="../model.html#Model">python_arango_ogm.db.model.Model</a></dt>
-                                <dd id="FooModel.LEVEL" class="variable"><a href="../model.html#Model.LEVEL">LEVEL</a></dd>
-                <dd id="FooModel.ADDITIONAL_PROPERTIES" class="variable"><a href="../model.html#Model.ADDITIONAL_PROPERTIES">ADDITIONAL_PROPERTIES</a></dd>
-                <dd id="FooModel.SCHEMA_NAME" class="variable"><a href="../model.html#Model.SCHEMA_NAME">SCHEMA_NAME</a></dd>
-                <dd id="FooModel.db" class="variable"><a href="../model.html#Model.db">db</a></dd>
-                <dd id="FooModel.is_field" class="function"><a href="../model.html#Model.is_field">is_field</a></dd>
-                <dd id="FooModel.all" class="function"><a href="../model.html#Model.all">all</a></dd>
-                <dd id="FooModel.remove_by_key" class="function"><a href="../model.html#Model.remove_by_key">remove_by_key</a></dd>
-                <dd id="FooModel.getFields" class="function"><a href="../model.html#Model.getFields">getFields</a></dd>
-                <dd id="FooModel.collection_name" class="function"><a href="../model.html#Model.collection_name">collection_name</a></dd>
+                                    <div><dt><a href="../pao_model.html#PAOModel">python_arango_ogm.db.pao_model.PAOModel</a></dt>
+                                <dd id="FooModel.LEVEL" class="variable"><a href="../pao_model.html#PAOModel.LEVEL">LEVEL</a></dd>
+                <dd id="FooModel.ADDITIONAL_PROPERTIES" class="variable"><a href="../pao_model.html#PAOModel.ADDITIONAL_PROPERTIES">ADDITIONAL_PROPERTIES</a></dd>
+                <dd id="FooModel.SCHEMA_NAME" class="variable"><a href="../pao_model.html#PAOModel.SCHEMA_NAME">SCHEMA_NAME</a></dd>
+                <dd id="FooModel.db" class="variable"><a href="../pao_model.html#PAOModel.db">db</a></dd>
+                <dd id="FooModel.is_field" class="function"><a href="../pao_model.html#PAOModel.is_field">is_field</a></dd>
+                <dd id="FooModel.all" class="function"><a href="../pao_model.html#PAOModel.all">all</a></dd>
+                <dd id="FooModel.remove_by_key" class="function"><a href="../pao_model.html#PAOModel.remove_by_key">remove_by_key</a></dd>
+                <dd id="FooModel.getFields" class="function"><a href="../pao_model.html#PAOModel.getFields">getFields</a></dd>
+                <dd id="FooModel.collection_name" class="function"><a href="../pao_model.html#PAOModel.collection_name">collection_name</a></dd>
 
             </div>
                                 </dl>
@@ -195,15 +195,15 @@ inheritance.</p>
 <div class="attr class">
             
     <span class="def">class</span>
-    <span class="name">BarModel</span><wbr>(<span class="base"><a href="../model.html#Model">python_arango_ogm.db.model.Model</a></span>):
+    <span class="name">BarModel</span><wbr>(<span class="base"><a href="../pao_model.html#PAOModel">python_arango_ogm.db.pao_model.PAOModel</a></span>):
 
                 <label class="view-source-button" for="BarModel-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#BarModel"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="BarModel-10"><a href="#BarModel-10"><span class="linenos">10</span></a><span class="k">class</span> <span class="nc">BarModel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-</span><span id="BarModel-11"><a href="#BarModel-11"><span class="linenos">11</span></a>    <span class="n">field_int</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_int_idx&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="BarModel-12"><a href="#BarModel-12"><span class="linenos">12</span></a>    <span class="n">field_str</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_str_idx&#39;</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="BarModel-10"><a href="#BarModel-10"><span class="linenos">10</span></a><span class="k">class</span> <span class="nc">BarModel</span><span class="p">(</span><span class="n">pao_model</span><span class="o">.</span><span class="n">PAOModel</span><span class="p">):</span>
+</span><span id="BarModel-11"><a href="#BarModel-11"><span class="linenos">11</span></a>    <span class="n">field_int</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_int_idx&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="BarModel-12"><a href="#BarModel-12"><span class="linenos">12</span></a>    <span class="n">field_str</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_str_idx&#39;</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -215,7 +215,7 @@ inheritance.</p>
                             <div id="BarModel.field_int" class="classattr">
                                 <div class="attr variable">
             <span class="name">field_int</span>        =
-<span class="default_value">&lt;<a href="../model.html#IntField">python_arango_ogm.db.model.IntField</a> object&gt;</span>
+<span class="default_value">&lt;<a href="../pao_model.html#IntField">python_arango_ogm.db.pao_model.IntField</a> object&gt;</span>
 
         
     </div>
@@ -227,7 +227,7 @@ inheritance.</p>
                             <div id="BarModel.field_str" class="classattr">
                                 <div class="attr variable">
             <span class="name">field_str</span>        =
-<span class="default_value">&lt;<a href="../model.html#StrField">python_arango_ogm.db.model.StrField</a> object&gt;</span>
+<span class="default_value">&lt;<a href="../pao_model.html#StrField">python_arango_ogm.db.pao_model.StrField</a> object&gt;</span>
 
         
     </div>
@@ -239,16 +239,16 @@ inheritance.</p>
                             <div class="inherited">
                                 <h5>Inherited Members</h5>
                                 <dl>
-                                    <div><dt><a href="../model.html#Model">python_arango_ogm.db.model.Model</a></dt>
-                                <dd id="BarModel.LEVEL" class="variable"><a href="../model.html#Model.LEVEL">LEVEL</a></dd>
-                <dd id="BarModel.ADDITIONAL_PROPERTIES" class="variable"><a href="../model.html#Model.ADDITIONAL_PROPERTIES">ADDITIONAL_PROPERTIES</a></dd>
-                <dd id="BarModel.SCHEMA_NAME" class="variable"><a href="../model.html#Model.SCHEMA_NAME">SCHEMA_NAME</a></dd>
-                <dd id="BarModel.db" class="variable"><a href="../model.html#Model.db">db</a></dd>
-                <dd id="BarModel.is_field" class="function"><a href="../model.html#Model.is_field">is_field</a></dd>
-                <dd id="BarModel.all" class="function"><a href="../model.html#Model.all">all</a></dd>
-                <dd id="BarModel.remove_by_key" class="function"><a href="../model.html#Model.remove_by_key">remove_by_key</a></dd>
-                <dd id="BarModel.getFields" class="function"><a href="../model.html#Model.getFields">getFields</a></dd>
-                <dd id="BarModel.collection_name" class="function"><a href="../model.html#Model.collection_name">collection_name</a></dd>
+                                    <div><dt><a href="../pao_model.html#PAOModel">python_arango_ogm.db.pao_model.PAOModel</a></dt>
+                                <dd id="BarModel.LEVEL" class="variable"><a href="../pao_model.html#PAOModel.LEVEL">LEVEL</a></dd>
+                <dd id="BarModel.ADDITIONAL_PROPERTIES" class="variable"><a href="../pao_model.html#PAOModel.ADDITIONAL_PROPERTIES">ADDITIONAL_PROPERTIES</a></dd>
+                <dd id="BarModel.SCHEMA_NAME" class="variable"><a href="../pao_model.html#PAOModel.SCHEMA_NAME">SCHEMA_NAME</a></dd>
+                <dd id="BarModel.db" class="variable"><a href="../pao_model.html#PAOModel.db">db</a></dd>
+                <dd id="BarModel.is_field" class="function"><a href="../pao_model.html#PAOModel.is_field">is_field</a></dd>
+                <dd id="BarModel.all" class="function"><a href="../pao_model.html#PAOModel.all">all</a></dd>
+                <dd id="BarModel.remove_by_key" class="function"><a href="../pao_model.html#PAOModel.remove_by_key">remove_by_key</a></dd>
+                <dd id="BarModel.getFields" class="function"><a href="../pao_model.html#PAOModel.getFields">getFields</a></dd>
+                <dd id="BarModel.collection_name" class="function"><a href="../pao_model.html#PAOModel.collection_name">collection_name</a></dd>
 
             </div>
                                 </dl>
@@ -259,16 +259,16 @@ inheritance.</p>
 <div class="attr class">
             
     <span class="def">class</span>
-    <span class="name">BazModel</span><wbr>(<span class="base"><a href="../model.html#Model">python_arango_ogm.db.model.Model</a></span>):
+    <span class="name">BazModel</span><wbr>(<span class="base"><a href="../pao_model.html#PAOModel">python_arango_ogm.db.pao_model.PAOModel</a></span>):
 
                 <label class="view-source-button" for="BazModel-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#BazModel"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="BazModel-14"><a href="#BazModel-14"><span class="linenos">14</span></a><span class="k">class</span> <span class="nc">BazModel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-</span><span id="BazModel-15"><a href="#BazModel-15"><span class="linenos">15</span></a>    <span class="n">field_int</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_int_idx&#39;</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="BazModel-16"><a href="#BazModel-16"><span class="linenos">16</span></a>    <span class="n">field_str</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_str_idx&#39;</span><span class="p">)</span>
-</span><span id="BazModel-17"><a href="#BazModel-17"><span class="linenos">17</span></a>    <span class="n">foo_edge</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">EdgeTo</span><span class="p">(</span><span class="n">FooModel</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="BazModel-14"><a href="#BazModel-14"><span class="linenos">14</span></a><span class="k">class</span> <span class="nc">BazModel</span><span class="p">(</span><span class="n">pao_model</span><span class="o">.</span><span class="n">PAOModel</span><span class="p">):</span>
+</span><span id="BazModel-15"><a href="#BazModel-15"><span class="linenos">15</span></a>    <span class="n">field_int</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_int_idx&#39;</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="BazModel-16"><a href="#BazModel-16"><span class="linenos">16</span></a>    <span class="n">field_str</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_str_idx&#39;</span><span class="p">)</span>
+</span><span id="BazModel-17"><a href="#BazModel-17"><span class="linenos">17</span></a>    <span class="n">foo_edge</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">EdgeTo</span><span class="p">(</span><span class="n">FooModel</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -280,7 +280,7 @@ inheritance.</p>
                             <div id="BazModel.field_int" class="classattr">
                                 <div class="attr variable">
             <span class="name">field_int</span>        =
-<span class="default_value">&lt;<a href="../model.html#IntField">python_arango_ogm.db.model.IntField</a> object&gt;</span>
+<span class="default_value">&lt;<a href="../pao_model.html#IntField">python_arango_ogm.db.pao_model.IntField</a> object&gt;</span>
 
         
     </div>
@@ -292,7 +292,7 @@ inheritance.</p>
                             <div id="BazModel.field_str" class="classattr">
                                 <div class="attr variable">
             <span class="name">field_str</span>        =
-<span class="default_value">&lt;<a href="../model.html#StrField">python_arango_ogm.db.model.StrField</a> object&gt;</span>
+<span class="default_value">&lt;<a href="../pao_model.html#StrField">python_arango_ogm.db.pao_model.StrField</a> object&gt;</span>
 
         
     </div>
@@ -304,7 +304,7 @@ inheritance.</p>
                             <div id="BazModel.foo_edge" class="classattr">
                                 <div class="attr variable">
             <span class="name">foo_edge</span>        =
-<span class="default_value">&lt;<a href="../model.html#EdgeTo">python_arango_ogm.db.model.EdgeTo</a> object&gt;</span>
+<span class="default_value">&lt;<a href="../pao_model.html#EdgeTo">python_arango_ogm.db.pao_model.EdgeTo</a> object&gt;</span>
 
         
     </div>
@@ -316,16 +316,16 @@ inheritance.</p>
                             <div class="inherited">
                                 <h5>Inherited Members</h5>
                                 <dl>
-                                    <div><dt><a href="../model.html#Model">python_arango_ogm.db.model.Model</a></dt>
-                                <dd id="BazModel.LEVEL" class="variable"><a href="../model.html#Model.LEVEL">LEVEL</a></dd>
-                <dd id="BazModel.ADDITIONAL_PROPERTIES" class="variable"><a href="../model.html#Model.ADDITIONAL_PROPERTIES">ADDITIONAL_PROPERTIES</a></dd>
-                <dd id="BazModel.SCHEMA_NAME" class="variable"><a href="../model.html#Model.SCHEMA_NAME">SCHEMA_NAME</a></dd>
-                <dd id="BazModel.db" class="variable"><a href="../model.html#Model.db">db</a></dd>
-                <dd id="BazModel.is_field" class="function"><a href="../model.html#Model.is_field">is_field</a></dd>
-                <dd id="BazModel.all" class="function"><a href="../model.html#Model.all">all</a></dd>
-                <dd id="BazModel.remove_by_key" class="function"><a href="../model.html#Model.remove_by_key">remove_by_key</a></dd>
-                <dd id="BazModel.getFields" class="function"><a href="../model.html#Model.getFields">getFields</a></dd>
-                <dd id="BazModel.collection_name" class="function"><a href="../model.html#Model.collection_name">collection_name</a></dd>
+                                    <div><dt><a href="../pao_model.html#PAOModel">python_arango_ogm.db.pao_model.PAOModel</a></dt>
+                                <dd id="BazModel.LEVEL" class="variable"><a href="../pao_model.html#PAOModel.LEVEL">LEVEL</a></dd>
+                <dd id="BazModel.ADDITIONAL_PROPERTIES" class="variable"><a href="../pao_model.html#PAOModel.ADDITIONAL_PROPERTIES">ADDITIONAL_PROPERTIES</a></dd>
+                <dd id="BazModel.SCHEMA_NAME" class="variable"><a href="../pao_model.html#PAOModel.SCHEMA_NAME">SCHEMA_NAME</a></dd>
+                <dd id="BazModel.db" class="variable"><a href="../pao_model.html#PAOModel.db">db</a></dd>
+                <dd id="BazModel.is_field" class="function"><a href="../pao_model.html#PAOModel.is_field">is_field</a></dd>
+                <dd id="BazModel.all" class="function"><a href="../pao_model.html#PAOModel.all">all</a></dd>
+                <dd id="BazModel.remove_by_key" class="function"><a href="../pao_model.html#PAOModel.remove_by_key">remove_by_key</a></dd>
+                <dd id="BazModel.getFields" class="function"><a href="../pao_model.html#PAOModel.getFields">getFields</a></dd>
+                <dd id="BazModel.collection_name" class="function"><a href="../pao_model.html#PAOModel.collection_name">collection_name</a></dd>
 
             </div>
                                 </dl>

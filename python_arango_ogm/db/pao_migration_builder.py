@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Dict, Sequence, List
 
 from python_arango_ogm.db.model_discovery import ModelDiscovery
-from python_arango_ogm.db import model
+from python_arango_ogm.db import pao_model
 from python_arango_ogm.utils import str_util
 from python_arango_ogm.db.migration_model import MigrationModel
 
@@ -17,7 +17,9 @@ def down(db):
 """
 
 INDENT = ' ' * 4
-class MigrationBuilder:
+
+
+class PAOMigrationBuilder:
     ADD_HASH_INDEX_STR = "{indent}{coll_var}.add_hash_index(name='{idx_name}', fields={fields}, unique={unique})"
     ADD_TTL_INDEX_STR = "{indent}{coll_var}.add_ttl_index({fields}, name='{idx_name}', expiry_time={expiry_time}"
 
@@ -49,7 +51,7 @@ class MigrationBuilder:
 
     def create_model_migrations(self):
         discovery = ModelDiscovery()
-        model_hash: Dict[str, type[model.Model]] = discovery.discover()
+        model_hash: Dict[str, type[pao_model.PAOModel]] = discovery.discover()
 
         graph_edges = []
 
@@ -68,7 +70,7 @@ class MigrationBuilder:
 
     def create_model_migration(
             self,
-            mod: type[model.Model],
+            mod: type[pao_model.PAOModel],
             mod_schema: dict,
             hash_indexes: Sequence,
             other_indexes: Sequence
@@ -168,14 +170,15 @@ class MigrationBuilder:
 
         return up_migration, down_migration
 
-    def build_migration(self, mod: type[model.Model], model_hash: Dict[str, type[model.Model]]) -> Dict[str, any]:
-        indexes = [e for e in dir(mod) if isinstance(getattr(mod, e), model.Index)]
+    def build_migration(self, mod: type[pao_model.PAOModel], model_hash: Dict[str, type[pao_model.PAOModel]]) -> Dict[
+        str, any]:
+        indexes = [e for e in dir(mod) if isinstance(getattr(mod, e), pao_model.Index)]
 
         mod_schema, hash_indexes = self.build_schema(mod)
         graph_edges = self.build_model_edges(mod, model_hash)
         other_indexes = []
         for oi in indexes:
-            index: model.Index = getattr(mod, oi)
+            index: pao_model.Index = getattr(mod, oi)
             other_indexes.append({
                 'fields': index.fields,
                 'index_type': index.index_type,
@@ -191,15 +194,15 @@ class MigrationBuilder:
             'other_indexes': other_indexes
         }
 
-    def build_schema(self, mod: type[model.Model]) -> tuple[Dict, Sequence]:
+    def build_schema(self, mod: type[pao_model.PAOModel]) -> tuple[Dict, Sequence]:
         required = []
         hash_indexes = []
         properties = {}
 
-        fields = [f for f in dir(mod) if isinstance(getattr(mod, f), model.Field)]
+        fields = [f for f in dir(mod) if isinstance(getattr(mod, f), pao_model.Field)]
 
         for f in fields:
-            field: model.Field = getattr(mod, f)
+            field: pao_model.Field = getattr(mod, f)
             properties[f] = field.build_schema_properties()
             if field.required:
                 required.append(f)
@@ -216,13 +219,15 @@ class MigrationBuilder:
         )
         return mod_schema, hash_indexes
 
-    def build_model_edges(self, mod: type[model.Model], model_hash: Dict[str, type[model.Model]]) -> Sequence[Dict]:
+    def build_model_edges(self, mod: type[pao_model.PAOModel], model_hash: Dict[str, type[pao_model.PAOModel]]) -> \
+            Sequence[Dict]:
         """ Build model edges and return as a list of dictionaries """
         graph_edges = []
-        edges = [e for e in dir(mod) if isinstance(getattr(mod, e), model.EdgeTo)]
+        edges = [e for e in dir(mod) if isinstance(getattr(mod, e), pao_model.EdgeTo)]
         for e in edges:
-            edge: model.EdgeTo = getattr(mod, e)
-            to_model: type[model.Model] = model_hash[edge.to_model] if isinstance(edge.to_model, str) else edge.to_model
+            edge: pao_model.EdgeTo = getattr(mod, e)
+            to_model: type[pao_model.PAOModel] = model_hash[edge.to_model] if isinstance(edge.to_model,
+                                                                                         str) else edge.to_model
             from_name = mod.collection_name()
             to_name = to_model.collection_name()
             edge_name = f"{from_name}__{to_name}"
@@ -277,15 +282,14 @@ class MigrationBuilder:
         """
         Build indexes defined as Index objects:
         """
-
         for idx in other_indexes:
-            idx_type: model.IndexTypeEnum = idx['index_type']
+            idx_type: pao_model.IndexTypeEnum = idx['index_type']
             idx_name = idx['name']
-            if idx_type == model.IndexTypeEnum.INVERTED:
+            if idx_type == pao_model.IndexTypeEnum.INVERTED:
                 up_migration.append(f"{INDENT}{coll_var}.add_inverted_index(name='{idx_name}', fields={idx['fields']}")
-            elif idx_type == model.IndexTypeEnum.GEO:
+            elif idx_type == pao_model.IndexTypeEnum.GEO:
                 up_migration.append(f"{INDENT}{coll_var}.add_geo_index(name='{idx_name}', fields={idx['fields']}")
-            elif idx_type == model.IndexTypeEnum.TTL:
+            elif idx_type == pao_model.IndexTypeEnum.TTL:
                 up_migration.append(self.ADD_TTL_INDEX_STR.format(
                     indent=INDENT,
                     coll_var=coll_var,
@@ -293,7 +297,7 @@ class MigrationBuilder:
                     idx_name=idx_name,
                     expiry_time=idx['expiry_seconds']
                 ))
-            elif idx_type == model.IndexTypeEnum.HASH:
+            elif idx_type == pao_model.IndexTypeEnum.HASH:
                 up_migration.append(self.ADD_HASH_INDEX_STR.format(
                     indent=INDENT,
                     coll_var=coll_var,

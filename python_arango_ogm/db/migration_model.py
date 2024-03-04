@@ -1,14 +1,14 @@
-from python_arango_ogm.db import model
+from python_arango_ogm.db import pao_model
 
 
-class MigrationModel(model.Model):
+class MigrationModel(pao_model.PAOModel):
     """ Built-in migration to track migrations. """
-    LEVEL = model.LevelEnum.STRICT
+    LEVEL = pao_model.LevelEnum.STRICT
     ADDITIONAL_PROPERTIES = False
     SCHEMA_NAME = "pao_migrations"
 
-    migration_number = model.IntField(index_name='migration_number_idx', unique=True, required=True)
-    migration_name = model.StrField(index_name='migration_name_idx', required=True)
-    migration_filename = model.StrField(index_name='migration_filename_idx', required=True)
-    created_at = model.FloatField(required=True)
-    updated_at = model.FloatField(required=True)
+    migration_number = pao_model.IntField(index_name='migration_number_idx', unique=True, required=True)
+    migration_name = pao_model.StrField(index_name='migration_name_idx', required=True)
+    migration_filename = pao_model.StrField(index_name='migration_filename_idx', required=True)
+    created_at = pao_model.FloatField(required=True)
+    updated_at = pao_model.FloatField(required=True)

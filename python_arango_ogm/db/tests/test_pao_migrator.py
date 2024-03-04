@@ -1,14 +1,14 @@
 import pathlib
 import shutil
 
-from python_arango_ogm.db.migration_builder import MigrationBuilder
+from python_arango_ogm.db.pao_migration_builder import PAOMigrationBuilder
 from python_arango_ogm.db.pao_database import PAODatabase
 from python_arango_ogm.db.pao_migrator import PAOMigrator
 
 mig_path = pathlib.Path(__file__).parent.parent.parent.parent.resolve()
 print("MIGRATION PATH:", mig_path)
 def test_simple_migrator():
-    migrator_builder = MigrationBuilder(mig_path)
+    migrator_builder = PAOMigrationBuilder(mig_path)
 
     try:
         migrator_builder.create_model_migrations()
@@ -22,7 +22,7 @@ def test_simple_migrator():
         shutil.rmtree(migrator_builder.migration_pathname)
 
 def test_migrator_idempotency():
-    migrator_builder = MigrationBuilder(mig_path)
+    migrator_builder = PAOMigrationBuilder(mig_path)
     try:
         migrator_builder.create_model_migrations()
         pao_database = PAODatabase(delete_db=True)

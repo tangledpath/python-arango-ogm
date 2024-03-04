@@ -25,11 +25,11 @@
             <ul>
   <li><a href="#python-arango-ogm">Python Arango OGM</a>
   <ul>
+    <li><a href="#github">GitHub</a></li>
+    <li><a href="#documentation">Documentation</a></li>
     <li><a href="#installation">Installation</a></li>
     <li><a href="#getting-started">Getting started</a></li>
     <li><a href="#usage">Usage:</a></li>
-    <li><a href="#github">GitHub</a></li>
-    <li><a href="#documentation">Documentation</a></li>
     <li><a href="#development">Development</a></li>
   </ul></li>
 </ul>
@@ -58,6 +58,14 @@ python_arango_ogm    </h1>
 
 <p>Python-based package implementing an OGM framework for arango; built on top of python-arango.</p>
 
+<h2 id="github">GitHub</h2>
+
+<p><a href="https://github.com/tangledpath/python-arango-ogm">https://github.com/tangledpath/python-arango-ogm</a></p>
+
+<h2 id="documentation">Documentation</h2>
+
+<p><a href="https://tangledpath.github.io/python-arango-ogm/python_arango_ogm.html">https://tangledpath.github.io/python-arango-ogm/python_arango_ogm.html</a></p>
+
 <h2 id="installation">Installation</h2>
 
 <p>pip install python-arango-ogm</p>
@@ -81,22 +89,24 @@ PAO_APP_PACKAGE=yourapp<a href="python_arango_ogm/db.html">python_arango_ogm.db<
 <p>In this setup, there should be a <code>models.py</code> in the yourapp.db package.  For example:</p>
 
 <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="kn">from</span> <span class="nn"><a href="python_arango_ogm/db.html">python_arango_ogm.db</a></span> <span class="kn">import</span> <span class="n">model</span>
+<pre><span></span><code><span class="kn">from</span> <span class="nn"><a href="python_arango_ogm/db.html">python_arango_ogm.db</a></span> <span class="kn">import</span> <span class="n">pao_model</span>
 
 
-<span class="k">class</span> <span class="nc">FooModel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">field_int</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_int_idx&#39;</span><span class="p">)</span>
-    <span class="n">field_str</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_str_idx&#39;</span><span class="p">)</span>
-    <span class="n">bar_edge</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">EdgeTo</span><span class="p">(</span><span class="s2">&quot;BarModel&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">FooModel</span><span class="p">(</span><span class="n">pao_model</span><span class="o">.</span><span class="n">PAOModel</span><span class="p">):</span>
+    <span class="n">field_int</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_int_idx&#39;</span><span class="p">)</span>
+    <span class="n">field_str</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_str_idx&#39;</span><span class="p">)</span>
+    <span class="n">bar_edge</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">EdgeTo</span><span class="p">(</span><span class="s2">&quot;BarModel&quot;</span><span class="p">)</span>
 
-<span class="k">class</span> <span class="nc">BarModel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">field_int</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_int_idx&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">field_str</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_str_idx&#39;</span><span class="p">)</span>
 
-<span class="k">class</span> <span class="nc">BazModel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">field_int</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_int_idx&#39;</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">field_str</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_str_idx&#39;</span><span class="p">)</span>
-    <span class="n">foo_edge</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">EdgeTo</span><span class="p">(</span><span class="n">FooModel</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">BarModel</span><span class="p">(</span><span class="n">pao_model</span><span class="o">.</span><span class="n">PAOModel</span><span class="p">):</span>
+    <span class="n">field_int</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_int_idx&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">field_str</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_str_idx&#39;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">BazModel</span><span class="p">(</span><span class="n">pao_model</span><span class="o">.</span><span class="n">PAOModel</span><span class="p">):</span>
+    <span class="n">field_int</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_int_idx&#39;</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">field_str</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_str_idx&#39;</span><span class="p">)</span>
+    <span class="n">foo_edge</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">EdgeTo</span><span class="p">(</span><span class="n">FooModel</span><span class="p">)</span>
 </code></pre>
 </div>
 
@@ -119,14 +129,6 @@ PAO_APP_PACKAGE=yourapp<a href="python_arango_ogm/db.html">python_arango_ogm.db<
 
 <p>You may use your models to perform various queries and commands
 <strong>TODO</strong>: document this more</p>
-
-<h2 id="github">GitHub</h2>
-
-<p><a href="https://github.com/tangledpath/python-arango-ogm">https://github.com/tangledpath/python-arango-ogm</a></p>
-
-<h2 id="documentation">Documentation</h2>
-
-<p><a href="https://tangledpath.github.io/python-arango-ogm/python_arango_ogm.html">https://tangledpath.github.io/python-arango-ogm/python_arango_ogm.html</a></p>
 
 <h2 id="development">Development</h2>
 
