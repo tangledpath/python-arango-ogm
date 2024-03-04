@@ -5,7 +5,7 @@ from pathlib import Path
 import arango
 from arango import AQLQueryExecuteError
 
-from python_arango_ogm.db.migration_model import MigrationModel
+from python_arango_ogm.db.pao_migration_model import PAOMigrationModel
 from python_arango_ogm.db.pao_database import PAODatabase
 
 
@@ -26,7 +26,7 @@ class PAOMigrator():
 
     def list_migrations(self):
         try:
-            result = list(MigrationModel.all({"migration_filename": "ASC"}))
+            result = list(PAOMigrationModel.all({"migration_filename": "ASC"}))
         except AQLQueryExecuteError as e:
             result = None
         return result
@@ -37,7 +37,7 @@ class PAOMigrator():
             m = migrations[-1]
             migration = importlib.import_module(f"{self.migration_package}.{m['migration_filename']}")
             migration.down(self.pao_db.db)
-            MigrationModel.remove_by_key(m['_key'])
+            PAOMigrationModel.remove_by_key(m['_key'])
 
     def apply_migrations(self):
         migrations = [f.stem for f in self.migration_pathname.iterdir() if not f.is_dir() and f.suffix == '.py']

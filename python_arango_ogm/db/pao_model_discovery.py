@@ -4,7 +4,7 @@ from typing import Sequence, Type, Dict
 
 from python_arango_ogm.db import pao_model
 
-class ModelDiscovery:
+class PAOModelDiscovery:
     def __init__(self):
         self.models_module_name = os.getenv('PAO_MODELS')
         if not self.models_module_name:

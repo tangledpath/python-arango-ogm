@@ -3,10 +3,10 @@ import os
 from pathlib import Path
 from typing import Dict, Sequence, List
 
-from python_arango_ogm.db.model_discovery import ModelDiscovery
+from python_arango_ogm.db.pao_model_discovery import PAOModelDiscovery
 from python_arango_ogm.db import pao_model
 from python_arango_ogm.utils import str_util
-from python_arango_ogm.db.migration_model import MigrationModel
+from python_arango_ogm.db.pao_migration_model import PAOMigrationModel
 
 MIGRATION_FILE_TEMPLATE = """
 def up(db):
@@ -50,16 +50,16 @@ class PAOMigrationBuilder:
             f.write(MIGRATION_FILE_TEMPLATE.format(migration_up='pass', migration_down='pass'))
 
     def create_model_migrations(self):
-        discovery = ModelDiscovery()
+        discovery = PAOModelDiscovery()
         model_hash: Dict[str, type[pao_model.PAOModel]] = discovery.discover()
 
         graph_edges = []
 
-        mig = self.build_migration(MigrationModel, model_hash)
+        mig = self.build_migration(PAOMigrationModel, model_hash)
 
         # Special collection to track migrations; should always be first migration:
         if "pao_migrations" not in self.existing_migrations.values():
-            self.create_model_migration(MigrationModel, mig['mod_schema'], mig['hash_indexes'], mig['other_indexes'])
+            self.create_model_migration(PAOMigrationModel, mig['mod_schema'], mig['hash_indexes'], mig['other_indexes'])
 
         for mod in model_hash.values():
             mig = self.build_migration(mod, model_hash)

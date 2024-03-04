@@ -4,9 +4,9 @@ import uuid
 
 from arango import ArangoClient
 
-from python_arango_ogm.db.model_discovery import ModelDiscovery
+from python_arango_ogm.db.pao_model_discovery import PAOModelDiscovery
 from python_arango_ogm.db.pao_queries import PAOQueries
-from python_arango_ogm.db.migration_model import MigrationModel
+from python_arango_ogm.db.pao_migration_model import PAOMigrationModel
 from python_arango_ogm.utils.logger import logging
 
 
@@ -63,14 +63,14 @@ class PAODatabase:
         self.inject_into_models()
 
     def inject_into_models(self):
-        discoverer = ModelDiscovery()
+        discoverer = PAOModelDiscovery()
         model_hash: Dict[str, any] = discoverer.discover()
         for m, model in model_hash.items():
             logging.debug(f"Injecting DB into model {m}")
             model.db = self
 
         # Inject into built-in models:
-        MigrationModel.db = self
+        PAOMigrationModel.db = self
 
     def get_db(self):
         return self.db
