@@ -81,20 +81,21 @@
 
                         <label class="view-source-button" for="mod-pao_migration_model-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span> <span class="nn">python_arango_ogm.db</span> <span class="kn">import</span> <span class="n">pao_model</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span> <span class="nn">python_arango_ogm.db</span> <span class="kn">import</span> <span class="n">pao_fields</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span> <span class="nn">python_arango_ogm.db.pao_model</span> <span class="kn">import</span> <span class="n">PAOModel</span><span class="p">,</span> <span class="n">LevelEnum</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="k">class</span> <span class="nc">PAOMigrationModel</span><span class="p">(</span><span class="n">pao_model</span><span class="o">.</span><span class="n">PAOModel</span><span class="p">):</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot; Built-in migration to track migrations. &quot;&quot;&quot;</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>    <span class="n">LEVEL</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">LevelEnum</span><span class="o">.</span><span class="n">STRICT</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>    <span class="n">ADDITIONAL_PROPERTIES</span> <span class="o">=</span> <span class="kc">False</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>    <span class="n">SCHEMA_NAME</span> <span class="o">=</span> <span class="s2">&quot;pao_migrations&quot;</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="n">migration_number</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;migration_number_idx&#39;</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">migration_name</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;migration_name_idx&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="n">migration_filename</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;migration_filename_idx&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="n">created_at</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">FloatField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="n">updated_at</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">FloatField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="k">class</span> <span class="nc">PAOMigrationModel</span><span class="p">(</span><span class="n">PAOModel</span><span class="p">):</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot; Built-in migration to track migrations. &quot;&quot;&quot;</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>    <span class="n">LEVEL</span> <span class="o">=</span> <span class="n">LevelEnum</span><span class="o">.</span><span class="n">STRICT</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>    <span class="n">ADDITIONAL_PROPERTIES</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>    <span class="n">SCHEMA_NAME</span> <span class="o">=</span> <span class="s2">&quot;pao_migrations&quot;</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">migration_number</span> <span class="o">=</span> <span class="n">pao_fields</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;migration_number_idx&#39;</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="n">migration_name</span> <span class="o">=</span> <span class="n">pao_fields</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;migration_name_idx&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="n">migration_filename</span> <span class="o">=</span> <span class="n">pao_fields</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;migration_filename_idx&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="n">created_at</span> <span class="o">=</span> <span class="n">pao_fields</span><span class="o">.</span><span class="n">FloatField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">updated_at</span> <span class="o">=</span> <span class="n">pao_fields</span><span class="o">.</span><span class="n">FloatField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -110,17 +111,17 @@
 
     </div>
     <a class="headerlink" href="#PAOMigrationModel"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="PAOMigrationModel-5"><a href="#PAOMigrationModel-5"><span class="linenos"> 5</span></a><span class="k">class</span> <span class="nc">PAOMigrationModel</span><span class="p">(</span><span class="n">pao_model</span><span class="o">.</span><span class="n">PAOModel</span><span class="p">):</span>
-</span><span id="PAOMigrationModel-6"><a href="#PAOMigrationModel-6"><span class="linenos"> 6</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot; Built-in migration to track migrations. &quot;&quot;&quot;</span>
-</span><span id="PAOMigrationModel-7"><a href="#PAOMigrationModel-7"><span class="linenos"> 7</span></a>    <span class="n">LEVEL</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">LevelEnum</span><span class="o">.</span><span class="n">STRICT</span>
-</span><span id="PAOMigrationModel-8"><a href="#PAOMigrationModel-8"><span class="linenos"> 8</span></a>    <span class="n">ADDITIONAL_PROPERTIES</span> <span class="o">=</span> <span class="kc">False</span>
-</span><span id="PAOMigrationModel-9"><a href="#PAOMigrationModel-9"><span class="linenos"> 9</span></a>    <span class="n">SCHEMA_NAME</span> <span class="o">=</span> <span class="s2">&quot;pao_migrations&quot;</span>
-</span><span id="PAOMigrationModel-10"><a href="#PAOMigrationModel-10"><span class="linenos">10</span></a>
-</span><span id="PAOMigrationModel-11"><a href="#PAOMigrationModel-11"><span class="linenos">11</span></a>    <span class="n">migration_number</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;migration_number_idx&#39;</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="PAOMigrationModel-12"><a href="#PAOMigrationModel-12"><span class="linenos">12</span></a>    <span class="n">migration_name</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;migration_name_idx&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="PAOMigrationModel-13"><a href="#PAOMigrationModel-13"><span class="linenos">13</span></a>    <span class="n">migration_filename</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;migration_filename_idx&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="PAOMigrationModel-14"><a href="#PAOMigrationModel-14"><span class="linenos">14</span></a>    <span class="n">created_at</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">FloatField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="PAOMigrationModel-15"><a href="#PAOMigrationModel-15"><span class="linenos">15</span></a>    <span class="n">updated_at</span> <span class="o">=</span> <span class="n">pao_model</span><span class="o">.</span><span class="n">FloatField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PAOMigrationModel-6"><a href="#PAOMigrationModel-6"><span class="linenos"> 6</span></a><span class="k">class</span> <span class="nc">PAOMigrationModel</span><span class="p">(</span><span class="n">PAOModel</span><span class="p">):</span>
+</span><span id="PAOMigrationModel-7"><a href="#PAOMigrationModel-7"><span class="linenos"> 7</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot; Built-in migration to track migrations. &quot;&quot;&quot;</span>
+</span><span id="PAOMigrationModel-8"><a href="#PAOMigrationModel-8"><span class="linenos"> 8</span></a>    <span class="n">LEVEL</span> <span class="o">=</span> <span class="n">LevelEnum</span><span class="o">.</span><span class="n">STRICT</span>
+</span><span id="PAOMigrationModel-9"><a href="#PAOMigrationModel-9"><span class="linenos"> 9</span></a>    <span class="n">ADDITIONAL_PROPERTIES</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="PAOMigrationModel-10"><a href="#PAOMigrationModel-10"><span class="linenos">10</span></a>    <span class="n">SCHEMA_NAME</span> <span class="o">=</span> <span class="s2">&quot;pao_migrations&quot;</span>
+</span><span id="PAOMigrationModel-11"><a href="#PAOMigrationModel-11"><span class="linenos">11</span></a>
+</span><span id="PAOMigrationModel-12"><a href="#PAOMigrationModel-12"><span class="linenos">12</span></a>    <span class="n">migration_number</span> <span class="o">=</span> <span class="n">pao_fields</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;migration_number_idx&#39;</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="PAOMigrationModel-13"><a href="#PAOMigrationModel-13"><span class="linenos">13</span></a>    <span class="n">migration_name</span> <span class="o">=</span> <span class="n">pao_fields</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;migration_name_idx&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="PAOMigrationModel-14"><a href="#PAOMigrationModel-14"><span class="linenos">14</span></a>    <span class="n">migration_filename</span> <span class="o">=</span> <span class="n">pao_fields</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;migration_filename_idx&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="PAOMigrationModel-15"><a href="#PAOMigrationModel-15"><span class="linenos">15</span></a>    <span class="n">created_at</span> <span class="o">=</span> <span class="n">pao_fields</span><span class="o">.</span><span class="n">FloatField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="PAOMigrationModel-16"><a href="#PAOMigrationModel-16"><span class="linenos">16</span></a>    <span class="n">updated_at</span> <span class="o">=</span> <span class="n">pao_fields</span><span class="o">.</span><span class="n">FloatField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -167,7 +168,7 @@
                             <div id="PAOMigrationModel.migration_number" class="classattr">
                                 <div class="attr variable">
             <span class="name">migration_number</span>        =
-<span class="default_value">&lt;<a href="pao_model.html#IntField">python_arango_ogm.db.pao_model.IntField</a> object&gt;</span>
+<span class="default_value">&lt;<a href="pao_fields.html#IntField">python_arango_ogm.db.pao_fields.IntField</a> object&gt;</span>
 
         
     </div>
@@ -179,7 +180,7 @@
                             <div id="PAOMigrationModel.migration_name" class="classattr">
                                 <div class="attr variable">
             <span class="name">migration_name</span>        =
-<span class="default_value">&lt;<a href="pao_model.html#StrField">python_arango_ogm.db.pao_model.StrField</a> object&gt;</span>
+<span class="default_value">&lt;<a href="pao_fields.html#StrField">python_arango_ogm.db.pao_fields.StrField</a> object&gt;</span>
 
         
     </div>
@@ -191,7 +192,7 @@
                             <div id="PAOMigrationModel.migration_filename" class="classattr">
                                 <div class="attr variable">
             <span class="name">migration_filename</span>        =
-<span class="default_value">&lt;<a href="pao_model.html#StrField">python_arango_ogm.db.pao_model.StrField</a> object&gt;</span>
+<span class="default_value">&lt;<a href="pao_fields.html#StrField">python_arango_ogm.db.pao_fields.StrField</a> object&gt;</span>
 
         
     </div>
@@ -203,7 +204,7 @@
                             <div id="PAOMigrationModel.created_at" class="classattr">
                                 <div class="attr variable">
             <span class="name">created_at</span>        =
-<span class="default_value">&lt;<a href="pao_model.html#FloatField">python_arango_ogm.db.pao_model.FloatField</a> object&gt;</span>
+<span class="default_value">&lt;<a href="pao_fields.html#FloatField">python_arango_ogm.db.pao_fields.FloatField</a> object&gt;</span>
 
         
     </div>
@@ -215,7 +216,7 @@
                             <div id="PAOMigrationModel.updated_at" class="classattr">
                                 <div class="attr variable">
             <span class="name">updated_at</span>        =
-<span class="default_value">&lt;<a href="pao_model.html#FloatField">python_arango_ogm.db.pao_model.FloatField</a> object&gt;</span>
+<span class="default_value">&lt;<a href="pao_fields.html#FloatField">python_arango_ogm.db.pao_fields.FloatField</a> object&gt;</span>
 
         
     </div>
@@ -233,7 +234,9 @@
                 <dd id="PAOMigrationModel.all" class="function"><a href="pao_model.html#PAOModel.all">all</a></dd>
                 <dd id="PAOMigrationModel.remove_by_key" class="function"><a href="pao_model.html#PAOModel.remove_by_key">remove_by_key</a></dd>
                 <dd id="PAOMigrationModel.getFields" class="function"><a href="pao_model.html#PAOModel.getFields">getFields</a></dd>
+                <dd id="PAOMigrationModel.getEdges" class="function"><a href="pao_model.html#PAOModel.getEdges">getEdges</a></dd>
                 <dd id="PAOMigrationModel.collection_name" class="function"><a href="pao_model.html#PAOModel.collection_name">collection_name</a></dd>
+                <dd id="PAOMigrationModel.marshall" class="function"><a href="pao_model.html#PAOModel.marshall">marshall</a></dd>
 
             </div>
                                 </dl>

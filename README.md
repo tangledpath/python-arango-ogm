@@ -16,37 +16,39 @@ Create a .env file at the root of your repository with the following keys; value
 ```
 PAO_MODELS=yourapp.db.models
 PAO_GRAPH_NAME=yourapp
-PAO_DB_NAME=yourapp
+PAO_APP_DB_NAME=yourapp
 PAO_DB_HOST=localhost
 PAO_DB_PORT=8529
 PAO_DB_ROOT_USER=root
 PAO_DB_ROOT_PASS=<ARANGO_ROOT_PASSWORD>
-PAO_DB_USER=yourapp 
-PAO_DB_PASS=<ARANGO_yourapp_PASSWORD>
+PAO_APP_DB_USER=yourapp 
+PAO_APP_DB_PASS=<ARANGO_yourapp_PASSWORD>
 PAO_APP_PACKAGE=yourapp.db
 ```
 
 In this setup, there should be a `models.py` in the yourapp.db package.  For example:
 
 ```python
-from python_arango_ogm.db import pao_model
+from python_arango_ogm.db import pao_fields
+from python_arango_ogm.db.pao_edges import PAOEdge
+from python_arango_ogm.db.pao_model import PAOModel
 
 
-class FooModel(pao_model.PAOModel):
-    field_int = pao_model.IntField(index_name='field_int_idx')
-    field_str = pao_model.StrField(unique=True, index_name='field_str_idx')
-    bar_edge = pao_model.EdgeTo("BarModel")
+class FooModel(PAOModel):
+    field_int = pao_fields.IntField(index_name='field_int_idx')
+    field_str = pao_fields.StrField(unique=True, index_name='field_str_idx')
+    bar_edge = PAOEdge("FooModel", "BarModel")
 
 
-class BarModel(pao_model.PAOModel):
-    field_int = pao_model.IntField(index_name='field_int_idx', required=True)
-    field_str = pao_model.StrField(unique=True, index_name='field_str_idx')
+class BarModel(PAOModel):
+    field_int = pao_fields.IntField(index_name='field_int_idx', required=True)
+    field_str = pao_fields.StrField(unique=True, index_name='field_str_idx')
 
 
-class BazModel(pao_model.PAOModel):
-    field_int = pao_model.IntField(index_name='field_int_idx', unique=True, required=True)
-    field_str = pao_model.StrField(index_name='field_str_idx')
-    foo_edge = pao_model.EdgeTo(FooModel)
+class BazModel(PAOModel):
+    field_int = pao_fields.IntField(index_name='field_int_idx', unique=True, required=True)
+    field_str = pao_fields.StrField(index_name='field_str_idx')
+    foo_edge = PAOEdge("BazModel", FooModel)
 ```
 
 ## Usage:

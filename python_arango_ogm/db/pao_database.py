@@ -1,68 +1,85 @@
 import os
-from typing import Any, Dict, Sequence
+from typing import Any, Dict, Sequence, Literal
 import uuid
 
 from arango import ArangoClient
 
+from python_arango_ogm.db.pao_db_base import PAODBBase
 from python_arango_ogm.db.pao_model_discovery import PAOModelDiscovery
 from python_arango_ogm.db.pao_queries import PAOQueries
 from python_arango_ogm.db.pao_migration_model import PAOMigrationModel
 from python_arango_ogm.utils.logger import logging
+from python_arango_ogm.utils.singleton import Singleton
 
 
-class PAODatabase:
+class PAODatabase(PAODBBase):
+    __metaclass__=Singleton
     VALID_SORT_VALUES = ["ASC", "DESC", ""]
 
     def __init__(self, delete_db: bool = False):
         # TODO: These probably don't need to be members:
-        self.db_name = os.getenv('PAO_DB_NAME')
-        self.host = os.getenv('PAO_DB_HOST', 'localhost')
-        self.port = os.getenv('PAO_DB_PORT', 8529)
-        self.protocol = os.getenv('PAO_DB_PROTOCOL', 'http')
-        self.root_user = os.getenv('PAO_DB_ROOT_USER')
+        print("CONSTRUCTING DB")
+        self.app_db_name = os.getenv('PAO_APP_DB_NAME')
+        host = os.getenv('PAO_DB_HOST', 'localhost')
+        port = os.getenv('PAO_DB_PORT', 8529)
+        protocol = os.getenv('PAO_DB_PROTOCOL', 'http')
+        root_user = os.getenv('PAO_DB_ROOT_USER')
         root_password = os.getenv('PAO_DB_ROOT_PASS')
-        self.username = os.getenv('PAO_DB_USER', 'root')
-        password = os.getenv('PAO_DB_PASS')
 
-        if self.db_name is None:
-            raise ValueError("PAO_DB_NAME needs to be defined in environment or in a .env file.")
+        if self.app_db_name is None:
+            raise ValueError("PAO_APP_DB_NAME needs to be defined in environment or in a .env file.")
 
-        if self.root_user is None:
+        if root_user is None:
             raise ValueError("PAO_DB_ROOT_USER needs to be defined in environment or in a .env file.")
 
         if root_password is None:
             raise ValueError('PAO_DB_ROOT_PASS needs to be defined in environment or in a .env file.')
 
-        if password is None:
-            raise ValueError('PAO_DB_PASS needs to be defined in environment or in a .env file.')
-
-        self.client = ArangoClient(hosts=f"{self.protocol}://{self.host}:{self.port}")
+        self.client = ArangoClient(hosts=f"{protocol}://{host}:{port}")
 
         # Connect to "_system" database as root user.
         # This returns an API wrapper for "_system" database.
-        # logging.debug(f"Connecting to system DB with {self.root_user}:{root_password}...")
-        sys_db = self.client.db('_system', username=self.root_user, password=root_password)
+        # logging.debug(f"Connecting to system DB with {root_user}:{root_password}...")
+        self.sys_db = self.client.db('_system', username=root_user, password=root_password)
 
-        # Create a new database named "test" if it does not exist.
+        self.db = None
+
+        # Create a new database if it does not exist.
+        self.setup_app_database(delete_db)
+
+    def setup_app_database(self, delete_db):
+        """
+        Setup app databases; deleting if specified by delete_db
+        This is called by constructor, but since this based on a
+        Singleton metaclass, it might neccesary to call it manually
+        after migrations have been appplied and whatnot.
+        """
+        app_user = os.getenv('PAO_APP_DB_USER', 'root')
+        app_pass = os.getenv('PAO_APP_DB_PASS')
+
+        if app_pass is None:
+            raise ValueError('PAO_APP_DB_PASS needs to be defined in environment or in a .env file.')
+
         create_db = True
-        if sys_db.has_database(self.db_name):
+        if self.sys_db.has_database(self.app_db_name):
             if delete_db:
-                sys_db.delete_database(self.db_name, ignore_missing=True)
+                self.sys_db.delete_database(self.app_db_name, ignore_missing=True)
             else:
                 create_db = False
         if create_db:
-            was_created = sys_db.create_database(self.db_name, [{
-                'username': self.username,
-                'password': password,
+            was_created = self.sys_db.create_database(self.app_db_name, [{
+                'username': app_user,
+                'password': app_pass,
                 'active': True,
             }])
             if not was_created:
-                raise ValueError(f"Database {self.db_name} was not created.")
+                raise ValueError(f"Database {self.app_db_name} was not created.")
 
-        self.db = self.client.db(self.db_name, username=self.username, password=password)
+        self.db = self.client.db(self.app_db_name, username=app_user, password=app_pass)
         self.inject_into_models()
 
     def inject_into_models(self):
+        """ Inject database into models, as PAODatabase is where the functionality is implemented."""
         discoverer = PAOModelDiscovery()
         model_hash: Dict[str, any] = discoverer.discover()
         for m, model in model_hash.items():
@@ -73,6 +90,7 @@ class PAODatabase:
         PAOMigrationModel.db = self
 
     def get_db(self):
+        """ Return underlying python-arango database"""
         return self.db
 
     def find_by_id(self, collection_name: str, key: Any):
@@ -112,6 +130,7 @@ class PAODatabase:
         return result
 
     def remove_by_key(self, collection_name: str, key: str):
+        """ Remove a document identified by `key` from collection """
         lookup_filter = self._format_lookup_filter({"_key": key})
         aql = PAOQueries.AQL_REMOVE_BY_ATTRS.format(lookup_filter=lookup_filter)
 
@@ -122,13 +141,16 @@ class PAODatabase:
     def get_by_attributes(
             self,
             collection_name: str,
-            lookup_key_dict: Dict = None,
-            sort_key_dict: Dict[str, str] = None
+            lookup_key_dict: Dict[str, Any] = None,
+            sort_key_dict: Dict[str, Literal['ASC', 'DESC', '']] = None
     ):
         """
-          Gets document associations (association_collection_name) from given collection_name,
-          looking up by the keys and values in lookup_key_dict, sorting by keys and direction
+          Gets documents from given collection_name, looking up by the keys and values
+          in lookup_key_dict, sorting by keys and direction
+
+          :param lookup_key_dict: A dictionary of keys and corresponding values used to query this collection
           values (ASC, DESC):
+          :param sort_key_dict: A dictionary of keys by which to sort documents.  Values specify direction (ASC, DESC, '')
         """
         logging.debug(f"LOOKUP:{lookup_key_dict} and SORT:{sort_key_dict}")
         lookup_filter = self._format_lookup_filter(lookup_key_dict)

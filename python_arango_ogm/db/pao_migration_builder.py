@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 from typing import Dict, Sequence, List
 
+from python_arango_ogm.db.pao_indexes import Index, IndexTypeEnum
 from python_arango_ogm.db.pao_model_discovery import PAOModelDiscovery
 from python_arango_ogm.db import pao_model
 from python_arango_ogm.utils import str_util
@@ -172,13 +173,13 @@ class PAOMigrationBuilder:
 
     def build_migration(self, mod: type[pao_model.PAOModel], model_hash: Dict[str, type[pao_model.PAOModel]]) -> Dict[
         str, any]:
-        indexes = [e for e in dir(mod) if isinstance(getattr(mod, e), pao_model.Index)]
+        indexes = [e for e in dir(mod) if isinstance(getattr(mod, e), Index)]
 
         mod_schema, hash_indexes = self.build_schema(mod)
         graph_edges = self.build_model_edges(mod, model_hash)
         other_indexes = []
         for oi in indexes:
-            index: pao_model.Index = getattr(mod, oi)
+            index: Index = getattr(mod, oi)
             other_indexes.append({
                 'fields': index.fields,
                 'index_type': index.index_type,
@@ -209,6 +210,7 @@ class PAOMigrationBuilder:
             if field.index_name or field.unique:
                 hash_indexes.append({'name': field.index_name, 'fields': [f], 'unique': field.unique, })
 
+        print("MOD:", mod.__name__)
         mod_schema = dict(
             rule=dict(
                 properties=properties,
@@ -223,9 +225,9 @@ class PAOMigrationBuilder:
             Sequence[Dict]:
         """ Build model edges and return as a list of dictionaries """
         graph_edges = []
-        edges = [e for e in dir(mod) if isinstance(getattr(mod, e), pao_model.EdgeTo)]
+        edges = [e for e in dir(mod) if isinstance(getattr(mod, e), pao_model.PAOEdge)]
         for e in edges:
-            edge: pao_model.EdgeTo = getattr(mod, e)
+            edge: pao_model.PAOEdge = getattr(mod, e)
             to_model: type[pao_model.PAOModel] = model_hash[edge.to_model] if isinstance(edge.to_model,
                                                                                          str) else edge.to_model
             from_name = mod.collection_name()
@@ -283,13 +285,13 @@ class PAOMigrationBuilder:
         Build indexes defined as Index objects:
         """
         for idx in other_indexes:
-            idx_type: pao_model.IndexTypeEnum = idx['index_type']
+            idx_type: IndexTypeEnum = idx['index_type']
             idx_name = idx['name']
-            if idx_type == pao_model.IndexTypeEnum.INVERTED:
+            if idx_type == IndexTypeEnum.INVERTED:
                 up_migration.append(f"{INDENT}{coll_var}.add_inverted_index(name='{idx_name}', fields={idx['fields']}")
-            elif idx_type == pao_model.IndexTypeEnum.GEO:
+            elif idx_type == IndexTypeEnum.GEO:
                 up_migration.append(f"{INDENT}{coll_var}.add_geo_index(name='{idx_name}', fields={idx['fields']}")
-            elif idx_type == pao_model.IndexTypeEnum.TTL:
+            elif idx_type == IndexTypeEnum.TTL:
                 up_migration.append(self.ADD_TTL_INDEX_STR.format(
                     indent=INDENT,
                     coll_var=coll_var,
@@ -297,7 +299,7 @@ class PAOMigrationBuilder:
                     idx_name=idx_name,
                     expiry_time=idx['expiry_seconds']
                 ))
-            elif idx_type == pao_model.IndexTypeEnum.HASH:
+            elif idx_type == IndexTypeEnum.HASH:
                 up_migration.append(self.ADD_HASH_INDEX_STR.format(
                     indent=INDENT,
                     coll_var=coll_var,
