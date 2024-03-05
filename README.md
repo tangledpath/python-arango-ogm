@@ -12,21 +12,40 @@ https://tangledpath.github.io/python-arango-ogm/python_arango_ogm.html
 pip install python-arango-ogm
 
 ## Getting started
-Create a .env file at the root of your repository with the following keys; values to be adjusted for your application: 
+Create a .env file at the root of your repository with the following keys; values to be adjusted for your application:
+
+### Environment file (or production configuration/secretes):
 ```
-PAO_APP_DB_NAME=yourapp
-PAO_APP_DB_USER=yourapp 
-PAO_APP_DB_PASS=<ARANGO_yourapp_PASSWORD>
-PAO_APP_PACKAGE=yourapp.gdb
+PAO_APP_DB_NAME=your_app
+PAO_APP_DB_USER=your_app 
+PAO_APP_DB_PASS=<ARANGO_YOUR_APP_PASSWORD>
+PAO_APP_PACKAGE=your_app.gdb
 PAO_DB_HOST=localhost
 PAO_DB_PORT=8529
 PAO_DB_ROOT_USER=root
 PAO_DB_ROOT_PASS=<ARANGO_ROOT_PASSWORD>
-PAO_GRAPH_NAME=yourapp
-PAO_MODELS=yourapp.gdb.models
+PAO_GRAPH_NAME=your_app
+PAO_MODELS=your_app.gdb.models
 ```
 
-In this setup, there should be a `models.py` in the yourapp.gdb package.  For example:
+### Initializing the database:
+Create an `__init__.py` file in your application's source tree to initialize the database; causing it to inject itself into the models.  PAODatabase is a based on a singleton metaclass:
+Modify as necessary:
+```python
+# Filename = your-app/your_app/gdb
+import os
+from dotenv import load_dotenv
+from python_arango_ogm.db.pao_database import PAODatabase
+
+# This assumes a development environment, you can add other environments; e.g., test.
+# Production environments will most likely not use the dotenv:
+if os.getenv('YOUR_APP_ENV', 'development') == 'development':
+    load_dotenv('.env') # Or '.env.dev', '.env.test', etc....
+
+PAODatabase()
+```
+
+In this setup, there should be a `models.py` in the your_app.gdb package.  For example:
 
 ```python
 from python_arango_ogm.db import pao_fields

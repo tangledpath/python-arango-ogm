@@ -8,9 +8,6 @@ from python_arango_ogm.db.pao_fields import Field
 from python_arango_ogm.utils import str_util
 from python_arango_ogm.db.pao_db_base import PAODBBase
 
-
-
-
 class LevelEnum(StrEnum):
     """
     Level Enum, used to specify when schema validation is applied
@@ -38,8 +35,11 @@ class PAOModel(ABC):
 
     @classmethod
     def all(cls, sort_fields:Dict[str, str]) -> str:
+        # TODO: Marshall
         return cls.db.get_by_attributes(cls.collection_name(), sort_key_dict=sort_fields)
 
+    # TODO: add other database functionality here (insert, upsert, queries)
+    
     @classmethod
     def remove_by_key(cls, key):
         cls.db.remove_by_key(cls.collection_name(), key)
