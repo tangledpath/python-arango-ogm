@@ -38,6 +38,7 @@
             <h2>Submodules</h2>
             <ul>
                     <li><a href="python_arango_ogm/db.html">db</a></li>
+                    <li><a href="python_arango_ogm/notebooks.html">notebooks</a></li>
             </ul>
 
 
@@ -73,21 +74,43 @@ python_arango_ogm    </h1>
 
 <h2 id="getting-started">Getting started</h2>
 
-<p>Create a .env file at the root of your repository with the following keys; values to be adjusted for your application: </p>
+<p>Create a .env file at the root of your repository with the following keys; values to be adjusted for your application:</p>
 
-<pre><code>PAO_APP_DB_NAME=yourapp
-PAO_APP_DB_USER=yourapp 
-PAO_APP_DB_PASS=&lt;ARANGO_yourapp_PASSWORD&gt;
-PAO_APP_PACKAGE=yourapp.gdb
+<h3 id="environment-file-or-production-configurationsecretes">Environment file (or production configuration/secretes):</h3>
+
+<pre><code>PAO_APP_DB_NAME=your_app
+PAO_APP_DB_USER=your_app 
+PAO_APP_DB_PASS=&lt;ARANGO_YOUR_APP_PASSWORD&gt;
+PAO_APP_PACKAGE=your_app.gdb
 PAO_DB_HOST=localhost
 PAO_DB_PORT=8529
 PAO_DB_ROOT_USER=root
 PAO_DB_ROOT_PASS=&lt;ARANGO_ROOT_PASSWORD&gt;
-PAO_GRAPH_NAME=yourapp
-PAO_MODELS=yourapp.gdb.models
+PAO_GRAPH_NAME=your_app
+PAO_MODELS=your_app.gdb.models
 </code></pre>
 
-<p>In this setup, there should be a <code>models.py</code> in the yourapp.gdb package.  For example:</p>
+<h3 id="initializing-the-database">Initializing the database:</h3>
+
+<p>Create an <code>__init__.py</code> file in your application's source tree to initialize the database; causing it to inject itself into the models.  PAODatabase is a based on a singleton metaclass:
+Modify as necessary:</p>
+
+<div class="pdoc-code codehilite">
+<pre><span></span><code><span class="c1"># Filename = your-app/your_app/gdb</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
+<span class="kn">from</span> <span class="nn"><a href="python_arango_ogm/db/pao_database.html">python_arango_ogm.db.pao_database</a></span> <span class="kn">import</span> <span class="n">PAODatabase</span>
+
+<span class="c1"># This assumes a development environment, you can add other environments; e.g., test.</span>
+<span class="c1"># Production environments will most likely not use the dotenv:</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;YOUR_APP_ENV&#39;</span><span class="p">,</span> <span class="s1">&#39;development&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;development&#39;</span><span class="p">:</span>
+    <span class="n">load_dotenv</span><span class="p">(</span><span class="s1">&#39;.env&#39;</span><span class="p">)</span> <span class="c1"># Or &#39;.env.dev&#39;, &#39;.env.test&#39;, etc....</span>
+
+<span class="n">PAODatabase</span><span class="p">()</span>
+</code></pre>
+</div>
+
+<p>In this setup, there should be a <code>models.py</code> in the your_app.gdb package.  For example:</p>
 
 <div class="pdoc-code codehilite">
 <pre><span></span><code><span class="kn">from</span> <span class="nn"><a href="python_arango_ogm/db.html">python_arango_ogm.db</a></span> <span class="kn">import</span> <span class="n">pao_fields</span>

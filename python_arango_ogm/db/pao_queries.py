@@ -14,6 +14,11 @@ class PAOQueries:
         RETURN NEW
     """
 
+    AQL_INSERT_DOCS = """
+        FOR doc IN @docs
+            INSERT MERGE(doc, {{ created_at: DATE_NOW(), updated_at: DATE_NOW() }}) INTO @@collection 
+    """
+
     AQL_REMOVE_BY_ATTRS="""
         FOR doc in @@collection
             {lookup_filter}

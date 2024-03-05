@@ -11,5 +11,5 @@ class PAOMigrationModel(PAOModel):
     migration_number = pao_fields.IntField(index_name='migration_number_idx', unique=True, required=True)
     migration_name = pao_fields.StrField(index_name='migration_name_idx', required=True)
     migration_filename = pao_fields.StrField(index_name='migration_filename_idx', required=True)
-    created_at = pao_fields.FloatField(required=True)
-    updated_at = pao_fields.FloatField(required=True)
+    # created_at = pao_fields.FloatField(required=True)
+    # updated_at = pao_fields.FloatField(required=True)

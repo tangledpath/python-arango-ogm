@@ -65,7 +65,7 @@ class PAOMigrator():
     def __create_migration_record(self, migration_filename):
         migration_number, migration_name = migration_filename.split('_', 1)
         self.pao_db.insert_doc("pao_migrations", {
-            "migration_number": migration_number,
+            "migration_number": f"`{int(migration_number)}`",
             "migration_name": migration_name,
             "migration_filename": migration_filename,
         })

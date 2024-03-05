@@ -21,7 +21,7 @@ INDENT = ' ' * 4
 
 
 class PAOMigrationBuilder:
-    ADD_HASH_INDEX_STR = "{indent}{coll_var}.add_hash_index(name='{idx_name}', fields={fields}, unique={unique})"
+    ADD_HASH_INDEX_STR = "{indent}{coll_var}.add_hash_index(name='{idx_name}', fields={fields}, unique={unique}, deduplicate=True)"
     ADD_TTL_INDEX_STR = "{indent}{coll_var}.add_ttl_index({fields}, name='{idx_name}', expiry_time={expiry_time}"
 
     def __init__(self, target_path: str = '.', overwrite: bool = False):
@@ -215,10 +215,12 @@ class PAOMigrationBuilder:
             rule=dict(
                 properties=properties,
                 additionalProperties=mod.ADDITIONAL_PROPERTIES,
-                required=required
             ),
             level=mod.LEVEL,
         )
+        if len(required):
+            mod_schema['rule']['required'] = required
+
         return mod_schema, hash_indexes
 
     def build_model_edges(self, mod: type[pao_model.PAOModel], model_hash: Dict[str, type[pao_model.PAOModel]]) -> \
@@ -257,7 +259,7 @@ class PAOMigrationBuilder:
             up_migration.append(prepare_collection_txt)
         else:
             up_migration.append(f"\n{INDENT}{coll_var}=db.create_collection('{coll_name}', {schema_var})")
-
+            up_migration.append(f"{INDENT}{coll_var}.configure(schema={schema_var})")
         down_migration.append(f"{coll_var}=db.collections('{coll_name}')")
 
         # Index migrations:

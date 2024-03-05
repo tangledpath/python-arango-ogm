@@ -179,13 +179,24 @@ class PAODatabase(PAODBBase):
         new_doc = self.__autogen_keys(collection_name, doc)
         insert_attrs = self._format_query_attrs(new_doc)
         aql = PAOQueries.AQL_INSERT_DOC.format(insert_attrs=insert_attrs)
-        logging.debug(f"INSERT QUERY: aql")
+        logging.debug(f"INSERT QUERY: {aql}: {insert_attrs}")
         inserted_docs = self.db.aql.execute(aql, count=True, bind_vars={'@collection': collection_name})
         logging.debug(f"inserted_docs: {inserted_docs.count()}")
         if not inserted_docs.count():
             raise RuntimeError(f"Error: collection_name document {doc} was not inserted.")
 
         return inserted_docs.next()
+
+    def insert_docs(self, collection_name: str, docs:Sequence[Dict[str, Any]]):
+        """ Insert given documents into collection with a single query"""
+        # TODO: batching:
+        new_docs = [self.__autogen_keys(collection_name, doc) for doc in docs]
+        new_docs = [self.__format_query_values(doc) for doc in new_docs]
+        inserted_docs = self.db.aql.execute(PAOQueries.AQL_INSERT_DOCS, bind_vars={
+            '@collection': collection_name,
+            'docs': new_docs
+        })
+
 
     def upsert_doc(
             self,
@@ -260,7 +271,7 @@ class PAODatabase(PAODBBase):
         """
         result = ''
         if lookup_key_dict and len(lookup_key_dict) > 0:
-            attrs = {f"doc.{k} == {self._format_query_value(str(v))}" for (k, v) in lookup_key_dict.items()}
+            attrs = {f"doc.{k} == {self.__format_query_value(v)}" for (k, v) in lookup_key_dict.items()}
             filter_by = " AND ".join(attrs)
             result = f"FILTER {filter_by}" if filter_by else ""
         return result
@@ -271,7 +282,7 @@ class PAODatabase(PAODBBase):
           Returns a string with format:
             'key1':'val1', 'key2':'val2", 'key3': literal_expression...
         """
-        attrs = {f"'{k}': {self._format_query_value(str(v))}" for (k, v) in doc.items()}
+        attrs = {f"'{k}': {self.__format_query_value(v)}" for (k, v) in doc.items()}
         return ", ".join(attrs)
 
     def _cursor_doc_generator(self, cursor):
@@ -284,14 +295,21 @@ class PAODatabase(PAODBBase):
             cursor.next()
 
     @staticmethod
-    def _format_query_value(value: str):
+    def __format_query_values(self, doc):
+        return {k:self.__format_query_value(v) for k, v in doc.items()}
+
+    @staticmethod
+    def __format_query_value(value: Any):
         """ Format value, allowing for literals """
-        if value.startswith('`') and value.endswith('`'):
-            # Literal, no quotes:
-            query_expression = value.replace('`', '')
+        if isinstance(value, str):
+            if value.startswith('`') and value.endswith('`'):
+                # Literal, no quotes:
+                query_expression = value.replace('`', '')
+            else:
+                # Non-literal; quote it:
+                query_expression = f"'{value}'"
         else:
-            # Non-literal; quote it:
-            query_expression = f"'{value}'"
+            query_expression = value
 
         return query_expression
 
