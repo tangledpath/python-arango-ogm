@@ -14,19 +14,19 @@ pip install python-arango-ogm
 ## Getting started
 Create a .env file at the root of your repository with the following keys; values to be adjusted for your application: 
 ```
-PAO_MODELS=yourapp.db.models
-PAO_GRAPH_NAME=yourapp
 PAO_APP_DB_NAME=yourapp
+PAO_APP_DB_USER=yourapp 
+PAO_APP_DB_PASS=<ARANGO_yourapp_PASSWORD>
+PAO_APP_PACKAGE=yourapp.gdb
 PAO_DB_HOST=localhost
 PAO_DB_PORT=8529
 PAO_DB_ROOT_USER=root
 PAO_DB_ROOT_PASS=<ARANGO_ROOT_PASSWORD>
-PAO_APP_DB_USER=yourapp 
-PAO_APP_DB_PASS=<ARANGO_yourapp_PASSWORD>
-PAO_APP_PACKAGE=yourapp.db
+PAO_GRAPH_NAME=yourapp
+PAO_MODELS=yourapp.gdb.models
 ```
 
-In this setup, there should be a `models.py` in the yourapp.db package.  For example:
+In this setup, there should be a `models.py` in the yourapp.gdb package.  For example:
 
 ```python
 from python_arango_ogm.db import pao_fields

@@ -75,19 +75,19 @@ python_arango_ogm    </h1>
 
 <p>Create a .env file at the root of your repository with the following keys; values to be adjusted for your application: </p>
 
-<pre><code>PAO_MODELS=yourapp.db.models
-PAO_GRAPH_NAME=yourapp
-PAO_APP_DB_NAME=yourapp
+<pre><code>PAO_APP_DB_NAME=yourapp
+PAO_APP_DB_USER=yourapp 
+PAO_APP_DB_PASS=&lt;ARANGO_yourapp_PASSWORD&gt;
+PAO_APP_PACKAGE=yourapp.gdb
 PAO_DB_HOST=localhost
 PAO_DB_PORT=8529
 PAO_DB_ROOT_USER=root
 PAO_DB_ROOT_PASS=&lt;ARANGO_ROOT_PASSWORD&gt;
-PAO_APP_DB_USER=yourapp 
-PAO_APP_DB_PASS=&lt;ARANGO_yourapp_PASSWORD&gt;
-PAO_APP_PACKAGE=yourapp<a href="python_arango_ogm/db.html">python_arango_ogm.db</a>
+PAO_GRAPH_NAME=yourapp
+PAO_MODELS=yourapp.gdb.models
 </code></pre>
 
-<p>In this setup, there should be a <code>models.py</code> in the yourapp.db package.  For example:</p>
+<p>In this setup, there should be a <code>models.py</code> in the yourapp.gdb package.  For example:</p>
 
 <div class="pdoc-code codehilite">
 <pre><span></span><code><span class="kn">from</span> <span class="nn"><a href="python_arango_ogm/db.html">python_arango_ogm.db</a></span> <span class="kn">import</span> <span class="n">pao_fields</span>
