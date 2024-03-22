@@ -13,7 +13,7 @@ from python_arango_ogm.utils.singleton import Singleton
 
 
 class PAODatabase(PAODBBase):
-    __metaclass__=Singleton
+    __metaclass__ = Singleton
     VALID_SORT_VALUES = ["ASC", "DESC", ""]
 
     def __init__(self, delete_db: bool = False):
@@ -93,19 +93,35 @@ class PAODatabase(PAODBBase):
         """ Return underlying python-arango database"""
         return self.db
 
-    def find_by_id(self, collection_name: str, key: Any):
+    def find_by_key(self, collection_name: str, key: Any):
         """
           Find document on collection by given key value:
         """
         return self.db.collection(collection_name).get(key)
 
-    def get_doc_associations(self, collection_name: str, association_collection_name: str, lookup_key_dict: Dict):
+    def get_related_edges(self, collection_name: str, association_collection_name: str, lookup_key_dict: Dict):
         """
-          Gets document associations (association_collection_name) from given collection_name,
-          looking up by the keys and values in lookup_key_dict:
+        Gets `association_collection_name` edges of `collection_name`;
+        looking up by the keys and values in `lookup_key_dict`:
         """
         lookup_filter = self._format_lookup_filter(lookup_key_dict)
-        aql = PAOQueries.AQL_QUERY_RELATED.format(lookup_filter=lookup_filter)
+        aql = PAOQueries.AQL_QUERY_RELATED_EDGES.format(lookup_filter=lookup_filter)
+        edge_collection_name = f"{collection_name}__{association_collection_name}"
+        logging.debug(f"Association query on [{collection_name}]->[{edge_collection_name}] [aql]")
+        cursor = self.db.aql.execute(aql, count=True, batch_size=10, bind_vars={
+            '@collection': collection_name,
+            '@edge_collection': edge_collection_name
+        })
+
+        return self._cursor_doc_generator(cursor)
+
+    def get_related_vertices(self, collection_name: str, association_collection_name: str, lookup_key_dict: Dict):
+        """
+        Lookup associated vertices (`association_collection_name`) through edges,
+        from given collection_name, using keys and values in lookup_key_dict:
+        """
+        lookup_filter = self._format_lookup_filter(lookup_key_dict)
+        aql = PAOQueries.AQL_QUERY_RELATED_VERTICES.format(lookup_filter=lookup_filter)
         edge_collection_name = f"{collection_name}__{association_collection_name}"
         logging.debug(f"Association query on [{collection_name}]->[{edge_collection_name}] [aql]")
         cursor = self.db.aql.execute(aql, count=True, batch_size=10, bind_vars={
@@ -118,8 +134,8 @@ class PAODatabase(PAODBBase):
 
     def find_by_attributes(self, collection_name: str, lookup_key_dict: Dict = None):
         """
-          Find a single document by given collection_name,
-          looking up by the keys and values in lookup_key_dict:
+        Find a single document by given collection_name,
+        looking up by the keys and values in lookup_key_dict:
         """
         docs = self.get_by_attributes(collection_name, lookup_key_dict)
         try:
@@ -145,12 +161,12 @@ class PAODatabase(PAODBBase):
             sort_key_dict: Dict[str, Literal['ASC', 'DESC', '']] = None
     ):
         """
-          Gets documents from given collection_name, looking up by the keys and values
-          in lookup_key_dict, sorting by keys and direction
+        Gets documents from given collection_name, looking up by the keys and values
+        in lookup_key_dict, sorting by keys and direction
 
-          :param lookup_key_dict: A dictionary of keys and corresponding values used to query this collection
-          values (ASC, DESC):
-          :param sort_key_dict: A dictionary of keys by which to sort documents.  Values specify direction (ASC, DESC, '')
+        :param lookup_key_dict: A dictionary of keys and corresponding values used to query this collection values
+        (ASC, DESC): :param sort_key_dict: A dictionary of keys by which to sort documents.  Values specify
+        direction: [ASC, DESC, '']
         """
         logging.debug(f"LOOKUP:{lookup_key_dict} and SORT:{sort_key_dict}")
         lookup_filter = self._format_lookup_filter(lookup_key_dict)
@@ -164,6 +180,7 @@ class PAODatabase(PAODBBase):
         """
           Insert edge document using keys (_from and _to are generated using collection name).
           Collection inferred from collection_name and association_collection_name.
+          TODO: Add attributes to set on edge
         """
         edge_collection_name = f"{collection_name}__{association_collection_name}"
         doc = {
@@ -176,6 +193,7 @@ class PAODatabase(PAODBBase):
         """
           Insert a new doc in collection:
         """
+        print(f"Inserting into collection {collection_name}: ", doc)
         new_doc = self.__autogen_keys(collection_name, doc)
         insert_attrs = self._format_query_attrs(new_doc)
         aql = PAOQueries.AQL_INSERT_DOC.format(insert_attrs=insert_attrs)
@@ -187,16 +205,16 @@ class PAODatabase(PAODBBase):
 
         return inserted_docs.next()
 
-    def insert_docs(self, collection_name: str, docs:Sequence[Dict[str, Any]]):
+    def insert_docs(self, collection_name: str, docs: Sequence[dict[str, Any]]):
         """ Insert given documents into collection with a single query"""
-        # TODO: batching:
         new_docs = [self.__autogen_keys(collection_name, doc) for doc in docs]
         new_docs = [self.__format_query_values(doc) for doc in new_docs]
-        inserted_docs = self.db.aql.execute(PAOQueries.AQL_INSERT_DOCS, bind_vars={
+        cursor = self.db.aql.execute(PAOQueries.AQL_INSERT_DOCS, bind_vars={
             '@collection': collection_name,
             'docs': new_docs
         })
 
+        return self._cursor_doc_generator(cursor)
 
     def upsert_doc(
             self,
@@ -228,7 +246,7 @@ class PAODatabase(PAODBBase):
         # Create key:val pairs (dictionary without braces):
         key_attrs = self._format_query_attrs(lookup_key_dict)  # str(lookup_key_dict)[1:-1]
         insert_attrs = self._format_query_attrs(new_doc)  # str(new_doc)[1:-1]
-        update_attrs = self._format_query_attrs(update_doc)  # str(update_doc)[1:-1]
+        update_attrs = self._format_query_attrs(update_doc)  # str(update_attrs)[1:-1]
 
         logging.debug(f"key_attrs: {key_attrs}")
         logging.debug(f"insert_attrs: {insert_attrs}")
@@ -285,18 +303,19 @@ class PAODatabase(PAODBBase):
         attrs = {f"'{k}': {self.__format_query_value(v)}" for (k, v) in doc.items()}
         return ", ".join(attrs)
 
-    def _cursor_doc_generator(self, cursor):
+    @staticmethod
+    def _cursor_doc_generator(cursor):
         while True:
             # batch_items = cursor.batch()
             # logging.debug(f"batch_items", batch_items)
             for doc in cursor.batch():
-                yield (doc)
-            if not cursor.has_more(): break
+                yield doc
+            if not cursor.has_more():
+                break
             cursor.next()
 
-    @staticmethod
-    def __format_query_values(self, doc):
-        return {k:self.__format_query_value(v) for k, v in doc.items()}
+    def __format_query_values(self, doc: Dict[str, Any]):
+        return {k: self.__format_query_value(v) for k, v in doc.items()}
 
     @staticmethod
     def __format_query_value(value: Any):

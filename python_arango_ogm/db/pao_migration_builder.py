@@ -227,9 +227,9 @@ class PAOMigrationBuilder:
             Sequence[Dict]:
         """ Build model edges and return as a list of dictionaries """
         graph_edges = []
-        edges = [e for e in dir(mod) if isinstance(getattr(mod, e), pao_model.PAOEdge)]
+        edges = [e for e in dir(mod) if isinstance(getattr(mod, e), pao_model.PAOEdgeDef)]
         for e in edges:
-            edge: pao_model.PAOEdge = getattr(mod, e)
+            edge: pao_model.PAOEdgeDef = getattr(mod, e)
             to_model: type[pao_model.PAOModel] = model_hash[edge.to_model] if isinstance(edge.to_model,
                                                                                          str) else edge.to_model
             from_name = mod.collection_name()

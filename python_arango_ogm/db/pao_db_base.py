@@ -13,6 +13,21 @@ class PAODBBase(ABC):
         """
         pass
 
+    def get_related_edges(self, collection_name: str, association_collection_name: str, lookup_key_dict: Dict):
+        """
+        Gets `association_collection_name` edges of `collection_name`;
+        looking up by the keys and values in `lookup_key_dict`:
+        """
+        pass
+
+    @abstractmethod
+    def get_related_vertices(self, collection_name: str, association_collection_name: str, lookup_key_dict: Dict):
+        """
+        Lookup associated vertices (`association_collection_name`) through edges,
+        from given collection_name, using keys and values in lookup_key_dict:
+        """
+        pass
+
     @abstractmethod
     def inject_into_models(self):
         """ Inject database into models, as PAODatabase is where the functionality is implemented."""
@@ -24,17 +39,9 @@ class PAODBBase(ABC):
         pass
 
     @abstractmethod
-    def find_by_id(self, collection_name: str, key: Any):
+    def find_by_key(self, collection_name: str, key: Any):
         """
           Find document on collection by given key value:
-        """
-        pass
-
-    @abstractmethod
-    def get_doc_associations(self, collection_name: str, association_collection_name: str, lookup_key_dict: Dict):
-        """
-          Gets document associations (association_collection_name) from given collection_name,
-          looking up by the keys and values in lookup_key_dict:
         """
         pass
 
@@ -82,6 +89,11 @@ class PAODBBase(ABC):
         """
           Insert a new doc in collection:
         """
+        pass
+
+    @abstractmethod
+    def insert_docs(self, collection_name: str, docs: Sequence[dict[str, Any]]):
+        """ Insert given documents into collection with a single query"""
         pass
 
     @abstractmethod

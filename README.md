@@ -49,14 +49,14 @@ In this setup, there should be a `models.py` in the your_app.gdb package.  For e
 
 ```python
 from python_arango_ogm.db import pao_fields
-from python_arango_ogm.db.pao_edges import PAOEdge
+from python_arango_ogm.db.pao_edges import PAOEdgeDef
 from python_arango_ogm.db.pao_model import PAOModel
 
 
 class FooModel(PAOModel):
     field_int = pao_fields.IntField(index_name='field_int_idx')
     field_str = pao_fields.StrField(unique=True, index_name='field_str_idx')
-    bar_edge = PAOEdge("FooModel", "BarModel")
+    bar_edge = PAOEdgeDef("FooModel", "BarModel")
 
 
 class BarModel(PAOModel):
@@ -67,7 +67,7 @@ class BarModel(PAOModel):
 class BazModel(PAOModel):
     field_int = pao_fields.IntField(index_name='field_int_idx', unique=True, required=True)
     field_str = pao_fields.StrField(index_name='field_str_idx')
-    foo_edge = PAOEdge("BazModel", FooModel)
+    foo_edge = PAOEdgeDef("BazModel", FooModel)
 ```
 
 ## Usage:

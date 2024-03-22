@@ -37,7 +37,6 @@
 
             <h2>Submodules</h2>
             <ul>
-                    <li><a href="python_arango_ogm/db.html">db</a></li>
                     <li><a href="python_arango_ogm/notebooks.html">notebooks</a></li>
             </ul>
 
@@ -99,7 +98,7 @@ Modify as necessary:</p>
 <pre><span></span><code><span class="c1"># Filename = your-app/your_app/gdb</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
-<span class="kn">from</span> <span class="nn"><a href="python_arango_ogm/db/pao_database.html">python_arango_ogm.db.pao_database</a></span> <span class="kn">import</span> <span class="n">PAODatabase</span>
+<span class="kn">from</span> <span class="nn">python_arango_ogm.db.pao_database</span> <span class="kn">import</span> <span class="n">PAODatabase</span>
 
 <span class="c1"># This assumes a development environment, you can add other environments; e.g., test.</span>
 <span class="c1"># Production environments will most likely not use the dotenv:</span>
@@ -113,15 +112,15 @@ Modify as necessary:</p>
 <p>In this setup, there should be a <code>models.py</code> in the your_app.gdb package.  For example:</p>
 
 <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="kn">from</span> <span class="nn"><a href="python_arango_ogm/db.html">python_arango_ogm.db</a></span> <span class="kn">import</span> <span class="n">pao_fields</span>
-<span class="kn">from</span> <span class="nn"><a href="python_arango_ogm/db/pao_edges.html">python_arango_ogm.db.pao_edges</a></span> <span class="kn">import</span> <span class="n">PAOEdge</span>
-<span class="kn">from</span> <span class="nn"><a href="python_arango_ogm/db/pao_model.html">python_arango_ogm.db.pao_model</a></span> <span class="kn">import</span> <span class="n">PAOModel</span>
+<pre><span></span><code><span class="kn">from</span> <span class="nn">python_arango_ogm.db</span> <span class="kn">import</span> <span class="n">pao_fields</span>
+<span class="kn">from</span> <span class="nn">python_arango_ogm.db.pao_edges</span> <span class="kn">import</span> <span class="n">PAOEdgeDef</span>
+<span class="kn">from</span> <span class="nn">python_arango_ogm.db.pao_model</span> <span class="kn">import</span> <span class="n">PAOModel</span>
 
 
 <span class="k">class</span> <span class="nc">FooModel</span><span class="p">(</span><span class="n">PAOModel</span><span class="p">):</span>
     <span class="n">field_int</span> <span class="o">=</span> <span class="n">pao_fields</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_int_idx&#39;</span><span class="p">)</span>
     <span class="n">field_str</span> <span class="o">=</span> <span class="n">pao_fields</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_str_idx&#39;</span><span class="p">)</span>
-    <span class="n">bar_edge</span> <span class="o">=</span> <span class="n">PAOEdge</span><span class="p">(</span><span class="s2">&quot;FooModel&quot;</span><span class="p">,</span> <span class="s2">&quot;BarModel&quot;</span><span class="p">)</span>
+    <span class="n">bar_edge</span> <span class="o">=</span> <span class="n">PAOEdgeDef</span><span class="p">(</span><span class="s2">&quot;FooModel&quot;</span><span class="p">,</span> <span class="s2">&quot;BarModel&quot;</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">BarModel</span><span class="p">(</span><span class="n">PAOModel</span><span class="p">):</span>
@@ -132,7 +131,7 @@ Modify as necessary:</p>
 <span class="k">class</span> <span class="nc">BazModel</span><span class="p">(</span><span class="n">PAOModel</span><span class="p">):</span>
     <span class="n">field_int</span> <span class="o">=</span> <span class="n">pao_fields</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_int_idx&#39;</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">field_str</span> <span class="o">=</span> <span class="n">pao_fields</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_str_idx&#39;</span><span class="p">)</span>
-    <span class="n">foo_edge</span> <span class="o">=</span> <span class="n">PAOEdge</span><span class="p">(</span><span class="s2">&quot;BazModel&quot;</span><span class="p">,</span> <span class="n">FooModel</span><span class="p">)</span>
+    <span class="n">foo_edge</span> <span class="o">=</span> <span class="n">PAOEdgeDef</span><span class="p">(</span><span class="s2">&quot;BazModel&quot;</span><span class="p">,</span> <span class="n">FooModel</span><span class="p">)</span>
 </code></pre>
 </div>
 
