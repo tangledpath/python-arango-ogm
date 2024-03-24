@@ -18,7 +18,7 @@ def test_simple_migration_builder():
         assert len(migrator_builder.existing_migrations)==5
     finally:
         print("Deleting migrations from ", migrator_builder.migration_pathname)
-        shutil.rmtree(migrator_builder.migration_pathname)
+        # shutil.rmtree(migrator_builder.migration_pathname)
 
 
 if __name__ == '__main__':

@@ -1,8 +1,8 @@
 class PAOQueries:
     AQL_UPSERT_DOC="""
         UPSERT {{ {key_attrs} }}
-        INSERT {{ {insert_attrs}, created_at: DATE_NOW() }}
-        UPDATE {{ {update_attrs}, updated_at: DATE_NOW() }}
+        INSERT {{ {insert_attrs} }}
+        UPDATE {{ {update_attrs} }}
         IN @@collection OPTIONS {{ keepNull: false }}
         RETURN NEW
     """
@@ -10,8 +10,13 @@ class PAOQueries:
     # INSERT AQL with created_at set:
     # attrs and keyattrs in format "KEY1:VAL1, KEY2:VAL2..."
     AQL_INSERT_DOC="""
-        INSERT {{ {insert_attrs}, created_at: DATE_NOW(), updated_at: DATE_NOW() }} INTO @@collection
+        INSERT {{ {insert_attrs} }} INTO @@collection
         RETURN NEW
+    """
+
+    AQL_INSERT_DOCS = """
+        FOR doc IN @docs
+            INSERT doc INTO @@collection 
     """
 
     AQL_REMOVE_BY_ATTRS="""
@@ -32,8 +37,17 @@ class PAOQueries:
           RETURN doc
     """
 
-      # Lookup associated docs
-    AQL_QUERY_RELATED = """
+    # Lookup associated edges:
+    AQL_QUERY_RELATED_EDGES = """
+        FOR doc IN @@collection
+          {lookup_filter}
+          FOR edge IN @@edge_collection
+            FILTER edge._from == doc._id
+            RETURN edge
+    """
+
+    # Lookup associated vertices through edges:
+    AQL_QUERY_RELATED_VERTICES = """
         FOR doc IN @@collection
           {lookup_filter}
           FOR edge IN @@edge_collection

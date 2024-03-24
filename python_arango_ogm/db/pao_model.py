@@ -1,28 +1,16 @@
-from enum import StrEnum, auto
+from __future__ import annotations
+
+import copy
+import sys
 from abc import ABC, abstractmethod
-from typing import Dict, Sequence, Union
+from enum import StrEnum, auto
+from functools import partialmethod
+from typing import Any, Dict, Sequence, Type, Union
 
+from python_arango_ogm.db.pao_edges import PAOEdgeDef
+from python_arango_ogm.db.pao_fields import Field, FloatField
 from python_arango_ogm.utils import str_util
-class FieldTypeEnum(StrEnum):
-    """
-    Field Type Enum, used to specify field type in certain situations:
-    """
-
-    ARRAY = auto()
-    FLOAT = auto()
-    INT = auto()
-    STRING = auto()
-
-
-class IndexTypeEnum(StrEnum):
-    """
-    Field Type Enum, used to specify field type in certain situations:
-    """
-    HASH = auto()
-    INVERTED = auto()
-    GEO = auto()
-    TTL = auto()
-
+from python_arango_ogm.db.pao_db_base import PAODBBase
 
 class LevelEnum(StrEnum):
     """
@@ -34,141 +22,11 @@ class LevelEnum(StrEnum):
     MODERATE = auto()
     STRICT = auto()
 
-
-class Field(ABC):
-    def __init__(
-            self,
-            field_type: FieldTypeEnum,
-            index_name: str = None,
-            required: bool = False,
-            unique: bool = False,
-            minimum: float = None,
-            maximum: float = None
-    ):
-        if unique and not index_name:
-            raise ValueError(f"unique attribute requires an index_name for field {self.__class__.__name__}")
-        self.field_type = field_type
-        self.index_name = index_name
-        self.unique = unique
-        self.required = required
-        self.minimum = minimum
-        self.maximum = maximum
-
-    @abstractmethod
-    def build_schema_properties(self) -> Dict[str, any]:
-        pass
-
-
-class FloatField(Field):
-    def __init__(self,
-                 index_name: str = None,
-                 required: bool = False,
-                 unique: bool = False,
-                 minimum: float = None,
-                 maximum: float = None):
-        super().__init__(FieldTypeEnum.FLOAT, index_name=index_name, unique=unique, required=required, minimum=minimum,
-                         maximum=maximum)
-
-    def build_schema_properties(self) -> Dict[str, any]:
-        props= {'type': 'number'}
-        if self.minimum is not None:
-            props['minimum'] = self.minimum
-
-        if self.maximum is not None:
-            props['maximum'] = self.maximum
-        return props
-
-class IntField(Field):
-    def __init__(self,
-                 index_name: str = None,
-                 unique: bool = False,
-                 required: bool = False,
-                 minimum=None,
-                 maximum=None):
-        super().__init__(FieldTypeEnum.INT, index_name=index_name, unique=unique, required=required, minimum=minimum,
-                         maximum=maximum)
-
-    def build_schema_properties(self) -> Dict[str, any]:
-        props = {'type': 'number', 'multipleOf': 1}
-        if self.minimum is not None:
-            props['minimum'] = self.minimum
-
-        if self.maximum is not None:
-            props['maximum'] = self.maximum
-
-        return props
-
-
-class StrField(Field):
-    def __init__(self,
-                 index_name: str = None,
-                 unique: bool = False,
-                 required: bool = False,
-                 minimum=None,
-                 maximum=None):
-        super().__init__(FieldTypeEnum.STRING, index_name=index_name, unique=unique, required=required, minimum=minimum,
-                         maximum=maximum)
-
-    def build_schema_properties(self) -> Dict[str, any]:
-        props = {'type': 'string'}
-        if self.minimum is not None:
-            props['minimum'] = self.minimum
-
-        if self.maximum is not None:
-            props['maximum'] = self.maximum
-
-        return props
-
-
-class ArrayField(Field):
-    def __init__(self, array_type: FieldTypeEnum, required: bool = False, minimum=None, maximum=None):
-        self.array_type = array_type
-        self.minimum = minimum
-        self.maximum = maximum
-        super().__init__(FieldTypeEnum.ARRAY, required=required)
-
-    def build_schema_properties(self) -> Dict[str, any]:
-        inner_field_type = 'number' if self.array_type in [FieldTypeEnum.INT, FieldTypeEnum.FLOAT] else 'string'
-
-        schema = {
-            'type': 'array',
-            'items': {
-                'type': inner_field_type
-            }
-        }
-
-        if self.minimum is not None:
-            schema['items']['minimum'] = self.minimum
-
-        if self.maximum is not None:
-            schema['items']['maximum'] = self.maximum
-
-        return schema
-
-
-class EdgeTo:
-    def __init__(self, to_model: ['PAOModel', str]):
-        self.to_model = to_model
-
-
-class Index:
-    def __init__(self, fields: Union[Sequence[str], dict[str: any]], index_type: IndexTypeEnum, name, unique=False, expiry_seconds=None):
-        self.fields = fields
-        self.index_type = index_type
-        self.name = name
-        self.expiry_seconds = expiry_seconds
-        self.unique = unique
-        if index_type == IndexTypeEnum.INVERTED and (len(fields) < 2 or not isinstance(fields, dict)):
-            raise ValueError('INVERTED indexes must have at least 2 fields in a dictinoary.')
-        elif index_type == IndexTypeEnum.TTL and expiry_seconds is None:
-            raise ValueError('TTL indexes must also have expiry seconds')
-
-
 class PAOModel(ABC):
     LEVEL = LevelEnum.STRICT
     ADDITIONAL_PROPERTIES = False
     SCHEMA_NAME = None
-    db = None # :PAODatabase (or TODO:interface)
+    db:PAODBBase = None
 
     def __init__(self):
         super().__init__()
@@ -177,25 +35,103 @@ class PAOModel(ABC):
     def is_field(cls, attribute_name: str) -> bool:
         attr = getattr(cls, attribute_name)
         return ((not attribute_name.startswith('_')) and
-                (issubclass(type(attr), Field) or issubclass(type(attr), EdgeTo)))
+                (issubclass(type(attr), Field) or issubclass(type(attr), PAOEdgeDef)))
 
     @classmethod
-    def all(cls, sort_fields:Dict[str, str]) -> str:
-        return cls.db.get_by_attributes(cls.collection_name(), sort_key_dict=sort_fields)
+    def all(cls, sort_fields:Dict[str, str], marshall=True) -> str:
+        records = cls.db.get_by_attributes(cls.collection_name(), sort_key_dict=sort_fields)
+        return cls.marshall_rows(records) if marshall else records
+
+    @classmethod
+    def insert(cls, attributes:Dict[str, Any]):
+        # TODO: See if we have timestamp fields (created_at, updated_at) and add accordingly
+        doc = cls.add_timestamps(attributes, created=True, updated=True)
+        return cls.db.insert_doc(cls.collection_name(), doc)
+    @classmethod
+    def upsert(cls, attributes:Dict[str, Any], insert_attrs:Dict[str, Any], update_attrs:Dict[str, Any]):
+        insert_doc = cls.add_timestamps(insert_attrs, created=True, updated=True)
+        update_doc = cls.add_timestamps(update_attrs, updated=True)
+        return cls.db.upsert_doc(cls.collection_name(), attributes, insert_doc, update_doc)
+
+    @classmethod
+    def find_by_key(cls, key, marshall:bool=True) -> Union[Dict[str, Any], Type[PAOModel]]:
+        """ Find a single record by given key and return """
+        record = cls.db.find_by_key(cls.collection_name(), key)
+        return cls.marshall_row(record) if marshall and record else record
+
+    @classmethod
+    def find_by_attributes(cls, attributes:Dict[str, Any], marshall:bool=True):
+        """ Find a single record by given attributes and return """
+        records = cls.db.find_by_attributes(cls.collection_name(), {'_key': key})
+        return cls.marshall_rows(records) if marshall else records
+
+    @classmethod
+    def get_by_attributes(cls, attributes:Dict[str, Any], sort_keys: Dict[str, str], marshall:bool=True):
+        """ Find records by given attributes, sorting by sort_keys and return """
+        cls.db.get_by_attributes(cls.collection_name(), {'_key': key})
 
     @classmethod
     def remove_by_key(cls, key):
         cls.db.remove_by_key(cls.collection_name(), key)
 
     @classmethod
-    def getFields(cls) -> Sequence:
-        model_fields = [f for f in dir(cls) if cls.is_field(f)]
+    def get_fields(cls) -> Dict[str, Union[Field, PAOEdgeDef]]:
+        model_fields = {f:getattr(cls, f) for f in dir(cls) if cls.is_field(f)}
         return model_fields
+
+    @classmethod
+    def get_edge_defs(cls) -> Dict[str, PAOEdgeDef]:
+        return {e:getattr(cls, e) for e in dir(cls) if isinstance(getattr(cls, e), PAOEdgeDef)}
+
+    def get_edges(self, edge_def:PAOEdgeDef) -> Sequence[PAOEdgeDef]:
+        if not self._key:
+            raise AttributeError("_key field is not present (this model instance hasn't been obtained from a marshalling method).")
+
+        return edge_def.associated_edges({"key": self._key})
+
+    def insert_edge(self, edge_def:PAOEdgeDef, to: Union[str, PAOModel]) -> Sequence[PAOEdgeDef]:
+        if not self._key:
+            raise AttributeError("_key field is not present (this model instance hasn't been obtained from a marshalling method).")
+
+        return edge_def.insert_edge({"from": self._key, "to": to})
 
     @classmethod
     def collection_name(cls) -> str:
         if cls.SCHEMA_NAME:
             coll_name = cls.SCHEMA_NAME
         else:
-            coll_name = str_util.snake_text(cls.__name__.split('PAOModel')[0])
+            coll_name = str_util.snake_text(cls.__name__.split('Model')[0])
         return coll_name
+
+    @classmethod
+    def add_timestamps(cls, field_dict:Dict[str, Any], created:bool=False, updated:bool=False) -> Dict[str, Any]:
+        fields = cls.get_fields()
+        doc = copy.copy(field_dict)
+        if created and 'created_at' in fields:
+            doc['created_at'] = '`DATE_NOW()`'
+        if updated and 'updated_at' in fields:
+            doc['updated_at'] = '`DATE_NOW()`'
+        return doc
+
+    @classmethod
+    def marshall_row(cls, field_dict:Dict[str, Any]) -> Type[PAOModel]:
+        model = PAOModel()
+        for k, v in field_dict.items():
+            setattr(model, k, v)
+
+        # edge_defs = cls.get_edge_defs()
+        # for edge_def in edge_defs.values():
+        #     to_model = edge_def.model_class_to()
+        #     def edge_accessor(self):
+        #         self.get_edges(self.key, edge)
+        #
+        #     # edge_accessor = partialmethod(get_edges, edge_def=edge_def)
+        #
+        #     setattr(model, f"{to_model.collection_name()}_edges", edge_accessor)
+        return model
+
+    @classmethod
+    def marshall_rows(cls, rows:Sequence[Dict[str, Any]]) -> Sequence[Type[PAOModel]]:
+        return [cls.marshall_row(row) for row in rows]
+
+
