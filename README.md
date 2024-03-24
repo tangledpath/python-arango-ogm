@@ -2,11 +2,14 @@
 Python-based package implementing an OGM (Object Graph Model) framework for arango; built on top of [python-arango]([url](https://github.com/arangodb/python-arango/)).  This is somewhat a work-in-progress as I integrate it back into the project from which it was extracted.
 **N.B.** This is extracted from a project that uses Arango heavily.  Obviously, with a graph database, you don't want to be tied too closely to an ORM due to the impedance mismatch between models and graph nodes and edges.  Still to do is to marshall query results into models when necessary for that good old model experience.  That will be done in the coming week(s).  
 
+## Homepage
+https://pypi.org/project/python-arango-ogm/
+
 ## GitHub
 https://github.com/tangledpath/python-arango-ogm
 
 ## Documentation
-https://tangledpath.github.io/python-arango-ogm/python_arango_ogm.html
+https://tangledpath.github.io/python-arango-ogm
 
 ## Installation
 pip install python-arango-ogm
@@ -35,7 +38,7 @@ PAO_GRAPH_NAME=your_app_graph               # Name of the graph to generate from
 Create an `__init__.py` file in your application's source tree to initialize the database; causing it to inject itself into the models.  PAODatabase is a based on a singleton metaclass:
 Modify as necessary:
 ```python
-# Filename = your-app/your_app/gdb
+# Filename = your-app/your_app/gdb/__init__.py
 import os
 from dotenv import load_dotenv
 from python_arango_ogm.db.pao_database import PAODatabase
@@ -48,7 +51,7 @@ if os.getenv('YOUR_APP_ENV', 'development') == 'development':
 PAODatabase()
 ```
 
-In this setup, there should be a `models.py` in the your_app.gdb package.  For example:
+In this setup, there should be a `models.py` in the your_app.gdb package.  For example, to define three models with two edges: 
 
 ```python
 from python_arango_ogm.db import pao_fields

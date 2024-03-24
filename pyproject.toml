@@ -1,10 +1,13 @@
 [tool.poetry]
 name = "python-arango-ogm"
-version = "0.2.3"
+version = "0.2.4"
 description = "Python-based package implementing an OGM framework for arango; built on top of python-arango."
 authors = ["Steven Miers <steven.miers@gmail.com>"]
 readme = "README.md"
 license = "The Unlicense"
+homepage = "https://pypi.org/project/python-arango-ogm/"
+repository = "https://github.com/tangledpath/python-arango-ogm"
+documentation = "https://tangledpath.github.io/python-arango-ogm"
 
 [tool.poetry.dependencies]
 python = "^3.12.2"
