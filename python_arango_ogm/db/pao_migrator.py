@@ -26,7 +26,7 @@ class PAOMigrator():
 
     def list_migrations(self):
         try:
-            result = list(PAOMigrationModel.all({"migration_filename": "ASC"}))
+            result = list(PAOMigrationModel.all({"migration_filename": "ASC"}, marshall=False))
         except AQLQueryExecuteError as e:
             result = None
         return result

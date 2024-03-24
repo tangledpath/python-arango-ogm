@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "python-arango-ogm"
-version = "0.2.2"
+version = "0.2.3"
 description = "Python-based package implementing an OGM framework for arango; built on top of python-arango."
 authors = ["Steven Miers <steven.miers@gmail.com>"]
 readme = "README.md"

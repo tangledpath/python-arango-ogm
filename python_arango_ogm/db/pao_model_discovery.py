@@ -7,9 +7,10 @@ from python_arango_ogm.db.pao_model import PAOModel
 
 class PAOModelDiscovery:
     def __init__(self):
-        self.models_module_name = os.getenv('PAO_MODELS')
-        if not self.models_module_name:
-            raise RuntimeError("PAO_MODELS must be defined in the environment (or a .env.test file)")
+        app_package = os.getenv('PAO_APP_PACKAGE')
+        if not app_package:
+            raise RuntimeError("PAO_APP_PACKAGE must be defined in the environment (or a .env.test file)")
+        self.models_module_name = f"{app_package}.models"
 
     def is_valid_model(self, model: Type) -> bool:
         return (not model is PAOModel) and issubclass(model, PAOModel)

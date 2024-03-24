@@ -27,13 +27,10 @@ class PAOMigrationBuilder:
     def __init__(self, target_path: str = '.', overwrite: bool = False):
         self.target_path = target_path
         self.overwrite = overwrite
-        self.models_module_name = os.getenv('PAO_MODELS')
-        if not self.models_module_name:
-            raise RuntimeError("PAO_MODELS must be defined in the environment (or a .env.test file)")
-
         app_package = os.getenv('PAO_APP_PACKAGE')
         if not app_package:
             raise RuntimeError("PAO_APP_PACKAGE must be defined in the environment (or a .env.test file)")
+        self.models_module_name = f"{app_package}.models"
         app_root = app_package.replace('.', '/')
         p = Path(self.target_path).joinpath(app_root)
         self.migration_pathname = p.joinpath("migrations")

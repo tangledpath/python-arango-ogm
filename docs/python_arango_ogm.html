@@ -75,19 +75,25 @@ python_arango_ogm    </h1>
 
 <p>Create a .env file at the root of your repository with the following keys; values to be adjusted for your application:</p>
 
-<h3 id="environment-file-or-production-configurationsecretes">Environment file (or production configuration/secretes):</h3>
+<h3 id="environment-file-or-production-configurationsecrets">Environment file (or production configuration/secrets):</h3>
 
-<pre><code>PAO_APP_DB_NAME=your_app
-PAO_APP_DB_USER=your_app 
-PAO_APP_DB_PASS=&lt;ARANGO_YOUR_APP_PASSWORD&gt;
-PAO_APP_PACKAGE=your_app.gdb
-PAO_DB_HOST=localhost
-PAO_DB_PORT=8529
-PAO_DB_ROOT_USER=root
-PAO_DB_ROOT_PASS=&lt;ARANGO_ROOT_PASSWORD&gt;
-PAO_GRAPH_NAME=your_app
-PAO_MODELS=your_app.gdb.models
+<p>These environment variables should be defined</p>
+
+<pre><code>PAO_APP_DB_NAME=your_app                    # The Arango database name for your app
+PAO_APP_DB_USER=your_app                    # The Arango database username for your app
+PAO_APP_DB_PASS=&lt;ARANGO_YOUR_APP_PASSWORD&gt;  # The Arango database password for your app
+PAO_APP_PACKAGE=your_app.gdb                # The package within your app where models and migrations are built
+PAO_DB_HOST=localhost                       # The DB host
+PAO_DB_PORT=8529                            # The DB port
+PAO_DB_ROOT_USER=root                       # The root DB username
+PAO_DB_ROOT_PASS=&lt;ARANGO_ROOT_PASSWORD&gt;     # The root DB password
+PAO_GRAPH_NAME=your_app_graph               # Name of the graph to generate from your vertices and edges
 </code></pre>
+
+<ul>
+<li>Models should be in the module PAO_APP_PACKAGE.models, e.g., <code>your_app/gdb/models.py</code></li>
+<li>Migrations will be generated in the package PAO_APP_PACKAGE.migrations, e.g., <code>your_app/gdb/migrations/</code></li>
+</ul>
 
 <h3 id="initializing-the-database">Initializing the database:</h3>
 
@@ -101,7 +107,7 @@ Modify as necessary:</p>
 <span class="kn">from</span> <span class="nn">python_arango_ogm.db.pao_database</span> <span class="kn">import</span> <span class="n">PAODatabase</span>
 
 <span class="c1"># This assumes a development environment, you can add other environments; e.g., test.</span>
-<span class="c1"># Production environments will most likely not use the dotenv:</span>
+<span class="c1"># Production environments will most likely not use dotenv files:</span>
 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;YOUR_APP_ENV&#39;</span><span class="p">,</span> <span class="s1">&#39;development&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;development&#39;</span><span class="p">:</span>
     <span class="n">load_dotenv</span><span class="p">(</span><span class="s1">&#39;.env&#39;</span><span class="p">)</span> <span class="c1"># Or &#39;.env.dev&#39;, &#39;.env.test&#39;, etc....</span>
 
@@ -148,6 +154,7 @@ Modify as necessary:</p>
 <li>Create a blank migration: <code>pao-migrate new-migration &lt;MIGRATION_NAME&gt;</code></li>
 <li>To see help <code>pao-migrate --help</code></li>
 <li>To see help for a specific command, for example: <code>pao-migrate migrate --help</code></li>
+<li>All of the above commands accept an optional "--env-file" argument; useful in development and testing.  For production, you will likely not use a dotenv file, and should rely instead on environment variable set in your production environment.    </li>
 </ul>
 
 <h3 id="in-code">In code</h3>
@@ -167,10 +174,10 @@ Modify as necessary:</p>
 
 <h3 id="documentation-2">Documentation</h3>
 
-<pre><code>  # Shows in browser
-  poetry run pdoc python_arango_ogm
-  # Generates to ./docs
-  poetry run pdoc python_arango_ogm -o ./docs
+<pre><code># Shows in browser
+poetry run pdoc python_arango_ogm
+# Generates to ./docs
+poetry run pdoc python_arango_ogm -o ./docs
 </code></pre>
 
 <h3 id="testing">Testing</h3>

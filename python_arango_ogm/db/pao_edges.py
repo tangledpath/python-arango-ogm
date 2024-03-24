@@ -15,6 +15,11 @@ class PAOEdgeDef:
         if self.to_model is None:
             raise ValueError("PAOEdgeDef to_model cannot be None")
 
+        app_package = os.getenv('PAO_APP_PACKAGE')
+        if not app_package:
+            raise RuntimeError("PAO_APP_PACKAGE must be defined in the environment (or a .env.test file)")
+        self.models_module_name = f"{app_package}.models"
+
     def db(self) -> PAODBBase:
         return self.model_class_from().db
 
@@ -53,8 +58,7 @@ class PAOEdgeDef:
     ) -> Type[python_arango_ogm.db.pao_model.PAOModel]:
         # Get model class, whether it is defined as an actual class or a model:
         if isinstance(model, str):
-            mod_nm = os.getenv('PAO_MODELS')
-            module = sys.modules[mod_nm]
+            module = sys.modules[self.models_module_name]
             result = getattr(module, model)
         else:
             result = model
