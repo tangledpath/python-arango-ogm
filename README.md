@@ -102,9 +102,9 @@ You may use your models to perform various queries and commands
 ### Documentation
 ```
 # Shows in browser
-poetry run pdoc python_arango_ogm
+poetry run pdoc python_arango_ogm/
 # Generates to ./docs
-poetry run pdoc python_arango_ogm -o ./docs
+poetry run pdoc python_arango_ogm/ -o ./docs
 ```
 
 ### Testing
