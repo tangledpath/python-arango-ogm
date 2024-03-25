@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="pdoc 14.4.0"/>
-    <title>python_arango_ogm API documentation</title>
+    <title>python_arango_ogm.db.pao_indexes API documentation</title>
             <link rel="icon" href="https://github.com/tangledpath/python-arango-ogm/blob/master/pao_sm.png"/>
 
     <style>/*! * Bootstrap Reboot v5.0.0 (https://getbootstrap.com/) * Copyright 2011-2021 The Bootstrap Authors * Copyright 2011-2021 Twitter, Inc. * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE) * Forked from Normalize.css, licensed MIT (https://github.com/necolas/normalize.css/blob/master/LICENSE.md) */*,::after,::before{box-sizing:border-box}@media (prefers-reduced-motion:no-preference){:root{scroll-behavior:smooth}}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";font-size:1rem;font-weight:400;line-height:1.5;color:#212529;background-color:#fff;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}hr{margin:1rem 0;color:inherit;background-color:currentColor;border:0;opacity:.25}hr:not([size]){height:1px}h1,h2,h3,h4,h5,h6{margin-top:0;margin-bottom:.5rem;font-weight:500;line-height:1.2}h1{font-size:calc(1.375rem + 1.5vw)}@media (min-width:1200px){h1{font-size:2.5rem}}h2{font-size:calc(1.325rem + .9vw)}@media (min-width:1200px){h2{font-size:2rem}}h3{font-size:calc(1.3rem + .6vw)}@media (min-width:1200px){h3{font-size:1.75rem}}h4{font-size:calc(1.275rem + .3vw)}@media (min-width:1200px){h4{font-size:1.5rem}}h5{font-size:1.25rem}h6{font-size:1rem}p{margin-top:0;margin-bottom:1rem}abbr[data-bs-original-title],abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted;cursor:help;-webkit-text-decoration-skip-ink:none;text-decoration-skip-ink:none}address{margin-bottom:1rem;font-style:normal;line-height:inherit}ol,ul{padding-left:2rem}dl,ol,ul{margin-top:0;margin-bottom:1rem}ol ol,ol ul,ul ol,ul ul{margin-bottom:0}dt{font-weight:700}dd{margin-bottom:.5rem;margin-left:0}blockquote{margin:0 0 1rem}b,strong{font-weight:bolder}small{font-size:.875em}mark{padding:.2em;background-color:#fcf8e3}sub,sup{position:relative;font-size:.75em;line-height:0;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}a{color:#0d6efd;text-decoration:underline}a:hover{color:#0a58ca}a:not([href]):not([class]),a:not([href]):not([class]):hover{color:inherit;text-decoration:none}code,kbd,pre,samp{font-family:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:1em;direction:ltr;unicode-bidi:bidi-override}pre{display:block;margin-top:0;margin-bottom:1rem;overflow:auto;font-size:.875em}pre code{font-size:inherit;color:inherit;word-break:normal}code{font-size:.875em;color:#d63384;word-wrap:break-word}a>code{color:inherit}kbd{padding:.2rem .4rem;font-size:.875em;color:#fff;background-color:#212529;border-radius:.2rem}kbd kbd{padding:0;font-size:1em;font-weight:700}figure{margin:0 0 1rem}img,svg{vertical-align:middle}table{caption-side:bottom;border-collapse:collapse}caption{padding-top:.5rem;padding-bottom:.5rem;color:#6c757d;text-align:left}th{text-align:inherit;text-align:-webkit-match-parent}tbody,td,tfoot,th,thead,tr{border-color:inherit;border-style:solid;border-width:0}label{display:inline-block}button{border-radius:0}button:focus:not(:focus-visible){outline:0}button,input,optgroup,select,textarea{margin:0;font-family:inherit;font-size:inherit;line-height:inherit}button,select{text-transform:none}[role=button]{cursor:pointer}select{word-wrap:normal}select:disabled{opacity:1}[list]::-webkit-calendar-picker-indicator{display:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]:not(:disabled),[type=reset]:not(:disabled),[type=submit]:not(:disabled),button:not(:disabled){cursor:pointer}::-moz-focus-inner{padding:0;border-style:none}textarea{resize:vertical}fieldset{min-width:0;padding:0;margin:0;border:0}legend{float:left;width:100%;padding:0;margin-bottom:.5rem;font-size:calc(1.275rem + .3vw);line-height:inherit}@media (min-width:1200px){legend{font-size:1.5rem}}legend+*{clear:left}::-webkit-datetime-edit-day-field,::-webkit-datetime-edit-fields-wrapper,::-webkit-datetime-edit-hour-field,::-webkit-datetime-edit-minute,::-webkit-datetime-edit-month-field,::-webkit-datetime-edit-text,::-webkit-datetime-edit-year-field{padding:0}::-webkit-inner-spin-button{height:auto}[type=search]{outline-offset:-2px;-webkit-appearance:textfield}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-color-swatch-wrapper{padding:0}::file-selector-button{font:inherit}::-webkit-file-upload-button{font:inherit;-webkit-appearance:button}output{display:inline-block}iframe{border:0}summary{display:list-item;cursor:pointer}progress{vertical-align:baseline}[hidden]{display:none!important}</style>
@@ -17,33 +17,64 @@
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button"><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path stroke-linecap='round' stroke="currentColor" stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg></label>
         <input id="togglestate" type="checkbox" aria-hidden="true" tabindex="-1">
-        <div>
+        <div>            <a class="pdoc-button module-list-button" href="../db.html">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-in-left" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M10 3.5a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 1 1 0v2A1.5 1.5 0 0 1 9.5 14h-8A1.5 1.5 0 0 1 0 12.5v-9A1.5 1.5 0 0 1 1.5 2h8A1.5 1.5 0 0 1 11 3.5v2a.5.5 0 0 1-1 0v-2z"/>
+  <path fill-rule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
+</svg>                &nbsp;python_arango_ogm.db</a>
+
             <img src="https://github.com/tangledpath/python-arango-ogm/blob/master/pao.png" class="logo" alt="project logo"/>
 
             <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
                    pattern=".+" required>
 
-            <h2>Contents</h2>
-            <ul>
-  <li><a href="#python-arango-ogm">Python Arango OGM</a>
-  <ul>
-    <li><a href="#homepage">Homepage</a></li>
-    <li><a href="#github">GitHub</a></li>
-    <li><a href="#documentation">Documentation</a></li>
-    <li><a href="#installation">Installation</a></li>
-    <li><a href="#getting-started">Getting started</a></li>
-    <li><a href="#usage">Usage:</a></li>
-    <li><a href="#development">Development</a></li>
-  </ul></li>
-</ul>
 
 
-            <h2>Submodules</h2>
-            <ul>
-                    <li><a href="python_arango_ogm/cli.html">cli</a></li>
-                    <li><a href="python_arango_ogm/db.html">db</a></li>
-                    <li><a href="python_arango_ogm/utils.html">utils</a></li>
-            </ul>
+            <h2>API Documentation</h2>
+                <ul class="memberlist">
+            <li>
+                    <a class="class" href="#IndexTypeEnum">IndexTypeEnum</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="variable" href="#IndexTypeEnum.HASH">HASH</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#IndexTypeEnum.INVERTED">INVERTED</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#IndexTypeEnum.GEO">GEO</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#IndexTypeEnum.TTL">TTL</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
+                    <a class="class" href="#Index">Index</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#Index.__init__">Index</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Index.fields">fields</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Index.index_type">index_type</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Index.name">name</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Index.expiry_seconds">expiry_seconds</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Index.unique">unique</a>
+                        </li>
+                </ul>
+
+            </li>
+    </ul>
 
 
 
@@ -57,200 +88,286 @@
     <main class="pdoc">
             <section class="module-info">
                     <h1 class="modulename">
-python_arango_ogm    </h1>
+<a href="./../../python_arango_ogm.html">python_arango_ogm</a><wbr>.<a href="./../db.html">db</a><wbr>.pao_indexes    </h1>
 
-                        <div class="docstring"><h1 id="python-arango-ogm">Python Arango OGM</h1>
+                
+                        <input id="mod-pao_indexes-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 
-<p>Python-based package implementing an OGM (Object Graph Model) framework for arango; built on top of <a href="[url](https://github.com/arangodb/python-arango/)">python-arango</a>.  This is somewhat a work-in-progress as I integrate it back into the project from which it was extracted.
-<strong>N.B.</strong> This is extracted from a project that uses Arango heavily.  Obviously, with a graph database, you don't want to be tied too closely to an ORM due to the impedance mismatch between models and graph nodes and edges.  Still to do is to marshall query results into models when necessary for that good old model experience.  That will be done in the coming week(s).</p>
+                        <label class="view-source-button" for="mod-pao_indexes-view-source"><span>View Source</span></label>
 
-<p>
-  <img src="https://github.com/tangledpath/python-arango-ogm/blob/master/pao.png" align="left" width="512"/>
-</p>
-
-<p>&nbsp</p>
-
-<p>&nbsp</p>
-
-<p>&nbsp</p>
-
-<p>&nbsp</p>
-
-<p>&nbsp</p>
-
-<p>&nbsp</p>
-
-<p>&nbsp</p>
-
-<p>&nbsp</p>
-
-<p>&nbsp</p>
-
-<p>&nbsp</p>
-
-<p>&nbsp</p>
-
-<p>&nbsp</p>
-
-<p>&nbsp</p>
-
-<h2 id="homepage">Homepage</h2>
-
-<p><a href="https://pypi.org/project/python-arango-ogm/">https://pypi.org/project/python-arango-ogm/</a></p>
-
-<h2 id="github">GitHub</h2>
-
-<p><a href="https://github.com/tangledpath/python-arango-ogm">https://github.com/tangledpath/python-arango-ogm</a></p>
-
-<h2 id="documentation">Documentation</h2>
-
-<p><a href="https://tangledpath.github.io/python-arango-ogm">https://tangledpath.github.io/python-arango-ogm</a></p>
-
-<h2 id="installation">Installation</h2>
-
-<p>pip install python-arango-ogm</p>
-
-<h2 id="getting-started">Getting started</h2>
-
-<p>Create a .env file at the root of your repository with the following keys; values to be adjusted for your application:</p>
-
-<h3 id="environment-file-or-production-configurationsecrets">Environment file (or production configuration/secrets):</h3>
-
-<p>These environment variables should be defined</p>
-
-<pre><code>PAO_APP_DB_NAME=your_app                    # The Arango database name for your app
-PAO_APP_DB_USER=your_app                    # The Arango database username for your app
-PAO_APP_DB_PASS=&lt;ARANGO_YOUR_APP_PASSWORD&gt;  # The Arango database password for your app
-PAO_APP_PACKAGE=your_app.gdb                # The package within your app where models and migrations are built
-PAO_DB_HOST=localhost                       # The DB host
-PAO_DB_PORT=8529                            # The DB port
-PAO_DB_ROOT_USER=root                       # The root DB username
-PAO_DB_ROOT_PASS=&lt;ARANGO_ROOT_PASSWORD&gt;     # The root DB password
-PAO_GRAPH_NAME=your_app_graph               # Name of the graph to generate from your vertices and edges
-</code></pre>
-
-<ul>
-<li>Models should be in the module PAO_APP_PACKAGE.models, e.g., <code>your_app/gdb/models.py</code></li>
-<li>Migrations will be generated in the package PAO_APP_PACKAGE.migrations, e.g., <code>your_app/gdb/migrations/</code></li>
-</ul>
-
-<h3 id="initializing-the-database">Initializing the database:</h3>
-
-<p>Create an <code>__init__.py</code> file in your application's source tree to initialize the database; causing it to inject itself into the models.  PAODatabase is a based on a singleton metaclass:
-Modify as necessary:</p>
-
-<div class="pdoc-code codehilite">
-<pre><span></span><code><span class="c1"># Filename = your-app/your_app/gdb/__init__.py</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
-<span class="kn">from</span> <span class="nn"><a href="python_arango_ogm/db/pao_database.html">python_arango_ogm.db.pao_database</a></span> <span class="kn">import</span> <span class="n">PAODatabase</span>
-
-<span class="c1"># This assumes a development environment, you can add other environments; e.g., test.</span>
-<span class="c1"># Production environments will most likely not use dotenv files:</span>
-<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;YOUR_APP_ENV&#39;</span><span class="p">,</span> <span class="s1">&#39;development&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;development&#39;</span><span class="p">:</span>
-    <span class="n">load_dotenv</span><span class="p">(</span><span class="s1">&#39;.env&#39;</span><span class="p">)</span> <span class="c1"># Or &#39;.env.dev&#39;, &#39;.env.test&#39;, etc....</span>
-
-<span class="n">PAODatabase</span><span class="p">()</span>
-</code></pre>
-</div>
-
-<p>In this setup, there should be a <code>models.py</code> in the your_app.gdb package.  For example, to define three models with two edges: </p>
-
-<div class="pdoc-code codehilite">
-<pre><span></span><code><span class="kn">from</span> <span class="nn"><a href="python_arango_ogm/db.html">python_arango_ogm.db</a></span> <span class="kn">import</span> <span class="n">pao_fields</span>
-<span class="kn">from</span> <span class="nn"><a href="python_arango_ogm/db/pao_edges.html">python_arango_ogm.db.pao_edges</a></span> <span class="kn">import</span> <span class="n">PAOEdgeDef</span>
-<span class="kn">from</span> <span class="nn"><a href="python_arango_ogm/db/pao_model.html">python_arango_ogm.db.pao_model</a></span> <span class="kn">import</span> <span class="n">PAOModel</span>
-
-
-<span class="k">class</span> <span class="nc">FooModel</span><span class="p">(</span><span class="n">PAOModel</span><span class="p">):</span>
-    <span class="n">field_int</span> <span class="o">=</span> <span class="n">pao_fields</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_int_idx&#39;</span><span class="p">)</span>
-    <span class="n">field_str</span> <span class="o">=</span> <span class="n">pao_fields</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_str_idx&#39;</span><span class="p">)</span>
-    <span class="n">bar_edge</span> <span class="o">=</span> <span class="n">PAOEdgeDef</span><span class="p">(</span><span class="s2">&quot;FooModel&quot;</span><span class="p">,</span> <span class="s2">&quot;BarModel&quot;</span><span class="p">)</span>
-
-
-<span class="k">class</span> <span class="nc">BarModel</span><span class="p">(</span><span class="n">PAOModel</span><span class="p">):</span>
-    <span class="n">field_int</span> <span class="o">=</span> <span class="n">pao_fields</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_int_idx&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">field_str</span> <span class="o">=</span> <span class="n">pao_fields</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_str_idx&#39;</span><span class="p">)</span>
-
-
-<span class="k">class</span> <span class="nc">BazModel</span><span class="p">(</span><span class="n">PAOModel</span><span class="p">):</span>
-    <span class="n">field_int</span> <span class="o">=</span> <span class="n">pao_fields</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_int_idx&#39;</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">field_str</span> <span class="o">=</span> <span class="n">pao_fields</span><span class="o">.</span><span class="n">StrField</span><span class="p">(</span><span class="n">index_name</span><span class="o">=</span><span class="s1">&#39;field_str_idx&#39;</span><span class="p">)</span>
-    <span class="n">foo_edge</span> <span class="o">=</span> <span class="n">PAOEdgeDef</span><span class="p">(</span><span class="s2">&quot;BazModel&quot;</span><span class="p">,</span> <span class="n">FooModel</span><span class="p">)</span>
-</code></pre>
-</div>
-
-<h2 id="usage">Usage:</h2>
-
-<h3 id="pao-migrate-cli">pao-migrate CLI</h3>
-
-<ul>
-<li>Make uncreated migrations for models: <code>pao-migrate make-migrations</code></li>
-<li>Migrate the database: <code>pao-migrate migrate</code></li>
-<li>Remove and Migrate the database: <code>pao-migrate migrate --clean</code></li>
-<li>List migrations: <code>pao-migrate list-migrations</code></li>
-<li>Rollback last migration: <code>pao-migrate migrate-rollback</code></li>
-<li>Create a blank migration: <code>pao-migrate new-migration &lt;MIGRATION_NAME&gt;</code></li>
-<li>To see help <code>pao-migrate --help</code></li>
-<li>To see help for a specific command, for example: <code>pao-migrate migrate --help</code></li>
-<li>All of the above commands accept an optional "--env-file" argument; useful in development and testing.  For production, you will likely not use a dotenv file, and should rely instead on environment variable set in your production environment.    </li>
-</ul>
-
-<h3 id="in-code">In code</h3>
-
-<p>You may use your models to perform various queries and commands
-<strong>TODO</strong>: document this more</p>
-
-<h2 id="development">Development</h2>
-
-<h3 id="linting">Linting</h3>
-
-<div class="pdoc-code codehilite">
-<pre><span></span><code><span class="w">   </span>ruff<span class="w"> </span>check<span class="w"> </span>.<span class="w"> </span><span class="c1"># Find linting errors</span>
-<span class="w">   </span>ruff<span class="w"> </span>check<span class="w"> </span>.<span class="w"> </span>--fix<span class="w"> </span><span class="c1"># Auto-fix linting errors (where possible)</span>
-</code></pre>
-</div>
-
-<h3 id="documentation-2">Documentation</h3>
-
-<pre><code># Shows in browser
-poetry run pdoc python_arango_ogm/
-# Generates to ./docs
-poetry run pdoc python_arango_ogm/ -o ./docs
-# OR (recommended)
-bin/build.sh 
-</code></pre>
-
-<h3 id="testing">Testing</h3>
-
-<div class="pdoc-code codehilite">
-<pre><span></span><code><span class="w">  </span>clear<span class="p">;</span><span class="w"> </span>pytest
-</code></pre>
-</div>
-
-<h3 id="building-and-publishing">Building and Publishing</h3>
-
-<h4 id="building">Building</h4>
-
-<p><code>poetry build</code></p>
-
-<h4 id="publishing">Publishing</h4>
-
-<p>Note: <code>--build</code> flag build before publishing
-<code>poetry publish --build -u __token__ -p $PYPI_TOKEN</code></p>
-</div>
-
-                        <input id="mod-python_arango_ogm-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-
-                        <label class="view-source-button" for="mod-python_arango_ogm-view-source"><span>View Source</span></label>
-
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">1</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos">2</span></a><span class="sd">.. include:: ../README.md</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos">3</span></a><span class="sd">&quot;&quot;&quot;</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">StrEnum</span><span class="p">,</span> <span class="n">auto</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Sequence</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="k">class</span> <span class="nc">IndexTypeEnum</span><span class="p">(</span><span class="n">StrEnum</span><span class="p">):</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="sd">    Field Type Enum, used to specify field type in certain situations:</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>    <span class="n">HASH</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="n">INVERTED</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">GEO</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="n">TTL</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="k">class</span> <span class="nc">Index</span><span class="p">:</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">:</span> <span class="nb">any</span><span class="p">]],</span> <span class="n">index_type</span><span class="p">:</span> <span class="n">IndexTypeEnum</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">expiry_seconds</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="n">fields</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">index_type</span> <span class="o">=</span> <span class="n">index_type</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">expiry_seconds</span> <span class="o">=</span> <span class="n">expiry_seconds</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">unique</span> <span class="o">=</span> <span class="n">unique</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>        <span class="k">if</span> <span class="n">index_type</span> <span class="o">==</span> <span class="n">IndexTypeEnum</span><span class="o">.</span><span class="n">INVERTED</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)):</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;INVERTED indexes must have at least 2 fields in a dictinoary.&#39;</span><span class="p">)</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>        <span class="k">elif</span> <span class="n">index_type</span> <span class="o">==</span> <span class="n">IndexTypeEnum</span><span class="o">.</span><span class="n">TTL</span> <span class="ow">and</span> <span class="n">expiry_seconds</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;TTL indexes must also have expiry seconds&#39;</span><span class="p">)</span>
 </span></pre></div>
 
 
             </section>
+                <section id="IndexTypeEnum">
+                            <input id="IndexTypeEnum-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+            
+    <span class="def">class</span>
+    <span class="name">IndexTypeEnum</span><wbr>(<span class="base">enum.StrEnum</span>):
+
+                <label class="view-source-button" for="IndexTypeEnum-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#IndexTypeEnum"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="IndexTypeEnum-6"><a href="#IndexTypeEnum-6"><span class="linenos"> 6</span></a><span class="k">class</span> <span class="nc">IndexTypeEnum</span><span class="p">(</span><span class="n">StrEnum</span><span class="p">):</span>
+</span><span id="IndexTypeEnum-7"><a href="#IndexTypeEnum-7"><span class="linenos"> 7</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="IndexTypeEnum-8"><a href="#IndexTypeEnum-8"><span class="linenos"> 8</span></a><span class="sd">    Field Type Enum, used to specify field type in certain situations:</span>
+</span><span id="IndexTypeEnum-9"><a href="#IndexTypeEnum-9"><span class="linenos"> 9</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="IndexTypeEnum-10"><a href="#IndexTypeEnum-10"><span class="linenos">10</span></a>    <span class="n">HASH</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="IndexTypeEnum-11"><a href="#IndexTypeEnum-11"><span class="linenos">11</span></a>    <span class="n">INVERTED</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="IndexTypeEnum-12"><a href="#IndexTypeEnum-12"><span class="linenos">12</span></a>    <span class="n">GEO</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="IndexTypeEnum-13"><a href="#IndexTypeEnum-13"><span class="linenos">13</span></a>    <span class="n">TTL</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Field Type Enum, used to specify field type in certain situations:</p>
+</div>
+
+
+                            <div id="IndexTypeEnum.HASH" class="classattr">
+                                <div class="attr variable">
+            <span class="name">HASH</span>        =
+<span class="default_value">&lt;<a href="#IndexTypeEnum.HASH">IndexTypeEnum.HASH</a>: &#39;hash&#39;&gt;</span>
+
+        
+    </div>
+    <a class="headerlink" href="#IndexTypeEnum.HASH"></a>
+    
+    
+
+                            </div>
+                            <div id="IndexTypeEnum.INVERTED" class="classattr">
+                                <div class="attr variable">
+            <span class="name">INVERTED</span>        =
+<span class="default_value">&lt;<a href="#IndexTypeEnum.INVERTED">IndexTypeEnum.INVERTED</a>: &#39;inverted&#39;&gt;</span>
+
+        
+    </div>
+    <a class="headerlink" href="#IndexTypeEnum.INVERTED"></a>
+    
+    
+
+                            </div>
+                            <div id="IndexTypeEnum.GEO" class="classattr">
+                                <div class="attr variable">
+            <span class="name">GEO</span>        =
+<span class="default_value">&lt;<a href="#IndexTypeEnum.GEO">IndexTypeEnum.GEO</a>: &#39;geo&#39;&gt;</span>
+
+        
+    </div>
+    <a class="headerlink" href="#IndexTypeEnum.GEO"></a>
+    
+    
+
+                            </div>
+                            <div id="IndexTypeEnum.TTL" class="classattr">
+                                <div class="attr variable">
+            <span class="name">TTL</span>        =
+<span class="default_value">&lt;<a href="#IndexTypeEnum.TTL">IndexTypeEnum.TTL</a>: &#39;ttl&#39;&gt;</span>
+
+        
+    </div>
+    <a class="headerlink" href="#IndexTypeEnum.TTL"></a>
+    
+    
+
+                            </div>
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt>enum.Enum</dt>
+                                <dd id="IndexTypeEnum.name" class="variable">name</dd>
+                <dd id="IndexTypeEnum.value" class="variable">value</dd>
+
+            </div>
+            <div><dt>builtins.str</dt>
+                                <dd id="IndexTypeEnum.encode" class="function">encode</dd>
+                <dd id="IndexTypeEnum.replace" class="function">replace</dd>
+                <dd id="IndexTypeEnum.split" class="function">split</dd>
+                <dd id="IndexTypeEnum.rsplit" class="function">rsplit</dd>
+                <dd id="IndexTypeEnum.join" class="function">join</dd>
+                <dd id="IndexTypeEnum.capitalize" class="function">capitalize</dd>
+                <dd id="IndexTypeEnum.casefold" class="function">casefold</dd>
+                <dd id="IndexTypeEnum.title" class="function">title</dd>
+                <dd id="IndexTypeEnum.center" class="function">center</dd>
+                <dd id="IndexTypeEnum.count" class="function">count</dd>
+                <dd id="IndexTypeEnum.expandtabs" class="function">expandtabs</dd>
+                <dd id="IndexTypeEnum.find" class="function">find</dd>
+                <dd id="IndexTypeEnum.partition" class="function">partition</dd>
+                <dd id="IndexTypeEnum.index" class="function">index</dd>
+                <dd id="IndexTypeEnum.ljust" class="function">ljust</dd>
+                <dd id="IndexTypeEnum.lower" class="function">lower</dd>
+                <dd id="IndexTypeEnum.lstrip" class="function">lstrip</dd>
+                <dd id="IndexTypeEnum.rfind" class="function">rfind</dd>
+                <dd id="IndexTypeEnum.rindex" class="function">rindex</dd>
+                <dd id="IndexTypeEnum.rjust" class="function">rjust</dd>
+                <dd id="IndexTypeEnum.rstrip" class="function">rstrip</dd>
+                <dd id="IndexTypeEnum.rpartition" class="function">rpartition</dd>
+                <dd id="IndexTypeEnum.splitlines" class="function">splitlines</dd>
+                <dd id="IndexTypeEnum.strip" class="function">strip</dd>
+                <dd id="IndexTypeEnum.swapcase" class="function">swapcase</dd>
+                <dd id="IndexTypeEnum.translate" class="function">translate</dd>
+                <dd id="IndexTypeEnum.upper" class="function">upper</dd>
+                <dd id="IndexTypeEnum.startswith" class="function">startswith</dd>
+                <dd id="IndexTypeEnum.endswith" class="function">endswith</dd>
+                <dd id="IndexTypeEnum.removeprefix" class="function">removeprefix</dd>
+                <dd id="IndexTypeEnum.removesuffix" class="function">removesuffix</dd>
+                <dd id="IndexTypeEnum.isascii" class="function">isascii</dd>
+                <dd id="IndexTypeEnum.islower" class="function">islower</dd>
+                <dd id="IndexTypeEnum.isupper" class="function">isupper</dd>
+                <dd id="IndexTypeEnum.istitle" class="function">istitle</dd>
+                <dd id="IndexTypeEnum.isspace" class="function">isspace</dd>
+                <dd id="IndexTypeEnum.isdecimal" class="function">isdecimal</dd>
+                <dd id="IndexTypeEnum.isdigit" class="function">isdigit</dd>
+                <dd id="IndexTypeEnum.isnumeric" class="function">isnumeric</dd>
+                <dd id="IndexTypeEnum.isalpha" class="function">isalpha</dd>
+                <dd id="IndexTypeEnum.isalnum" class="function">isalnum</dd>
+                <dd id="IndexTypeEnum.isidentifier" class="function">isidentifier</dd>
+                <dd id="IndexTypeEnum.isprintable" class="function">isprintable</dd>
+                <dd id="IndexTypeEnum.zfill" class="function">zfill</dd>
+                <dd id="IndexTypeEnum.format" class="function">format</dd>
+                <dd id="IndexTypeEnum.format_map" class="function">format_map</dd>
+                <dd id="IndexTypeEnum.maketrans" class="function">maketrans</dd>
+
+            </div>
+                                </dl>
+                            </div>
+                </section>
+                <section id="Index">
+                            <input id="Index-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+            
+    <span class="def">class</span>
+    <span class="name">Index</span>:
+
+                <label class="view-source-button" for="Index-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Index"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Index-16"><a href="#Index-16"><span class="linenos">16</span></a><span class="k">class</span> <span class="nc">Index</span><span class="p">:</span>
+</span><span id="Index-17"><a href="#Index-17"><span class="linenos">17</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">:</span> <span class="nb">any</span><span class="p">]],</span> <span class="n">index_type</span><span class="p">:</span> <span class="n">IndexTypeEnum</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">expiry_seconds</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span><span id="Index-18"><a href="#Index-18"><span class="linenos">18</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="n">fields</span>
+</span><span id="Index-19"><a href="#Index-19"><span class="linenos">19</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">index_type</span> <span class="o">=</span> <span class="n">index_type</span>
+</span><span id="Index-20"><a href="#Index-20"><span class="linenos">20</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+</span><span id="Index-21"><a href="#Index-21"><span class="linenos">21</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">expiry_seconds</span> <span class="o">=</span> <span class="n">expiry_seconds</span>
+</span><span id="Index-22"><a href="#Index-22"><span class="linenos">22</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">unique</span> <span class="o">=</span> <span class="n">unique</span>
+</span><span id="Index-23"><a href="#Index-23"><span class="linenos">23</span></a>        <span class="k">if</span> <span class="n">index_type</span> <span class="o">==</span> <span class="n">IndexTypeEnum</span><span class="o">.</span><span class="n">INVERTED</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)):</span>
+</span><span id="Index-24"><a href="#Index-24"><span class="linenos">24</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;INVERTED indexes must have at least 2 fields in a dictinoary.&#39;</span><span class="p">)</span>
+</span><span id="Index-25"><a href="#Index-25"><span class="linenos">25</span></a>        <span class="k">elif</span> <span class="n">index_type</span> <span class="o">==</span> <span class="n">IndexTypeEnum</span><span class="o">.</span><span class="n">TTL</span> <span class="ow">and</span> <span class="n">expiry_seconds</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Index-26"><a href="#Index-26"><span class="linenos">26</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;TTL indexes must also have expiry seconds&#39;</span><span class="p">)</span>
+</span></pre></div>
+
+
+    
+
+                            <div id="Index.__init__" class="classattr">
+                                        <input id="Index.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="name">Index</span><span class="signature pdoc-code multiline">(<span class="param">	fields: Union[Sequence[str], dict[slice(&lt;class &#x27;str&#x27;&gt;, &lt;built-in function any&gt;, None)]],</span><span class="param">	<span class="n">index_type</span><span class="p">:</span> <span class="n"><a href="#IndexTypeEnum">IndexTypeEnum</a></span>,</span><span class="param">	<span class="n">name</span>,</span><span class="param">	<span class="n">unique</span><span class="o">=</span><span class="kc">False</span>,</span><span class="param">	<span class="n">expiry_seconds</span><span class="o">=</span><span class="kc">None</span></span>)</span>
+
+                <label class="view-source-button" for="Index.__init__-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Index.__init__"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Index.__init__-17"><a href="#Index.__init__-17"><span class="linenos">17</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">:</span> <span class="nb">any</span><span class="p">]],</span> <span class="n">index_type</span><span class="p">:</span> <span class="n">IndexTypeEnum</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">expiry_seconds</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span><span id="Index.__init__-18"><a href="#Index.__init__-18"><span class="linenos">18</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="n">fields</span>
+</span><span id="Index.__init__-19"><a href="#Index.__init__-19"><span class="linenos">19</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">index_type</span> <span class="o">=</span> <span class="n">index_type</span>
+</span><span id="Index.__init__-20"><a href="#Index.__init__-20"><span class="linenos">20</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+</span><span id="Index.__init__-21"><a href="#Index.__init__-21"><span class="linenos">21</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">expiry_seconds</span> <span class="o">=</span> <span class="n">expiry_seconds</span>
+</span><span id="Index.__init__-22"><a href="#Index.__init__-22"><span class="linenos">22</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">unique</span> <span class="o">=</span> <span class="n">unique</span>
+</span><span id="Index.__init__-23"><a href="#Index.__init__-23"><span class="linenos">23</span></a>        <span class="k">if</span> <span class="n">index_type</span> <span class="o">==</span> <span class="n">IndexTypeEnum</span><span class="o">.</span><span class="n">INVERTED</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)):</span>
+</span><span id="Index.__init__-24"><a href="#Index.__init__-24"><span class="linenos">24</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;INVERTED indexes must have at least 2 fields in a dictinoary.&#39;</span><span class="p">)</span>
+</span><span id="Index.__init__-25"><a href="#Index.__init__-25"><span class="linenos">25</span></a>        <span class="k">elif</span> <span class="n">index_type</span> <span class="o">==</span> <span class="n">IndexTypeEnum</span><span class="o">.</span><span class="n">TTL</span> <span class="ow">and</span> <span class="n">expiry_seconds</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Index.__init__-26"><a href="#Index.__init__-26"><span class="linenos">26</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;TTL indexes must also have expiry seconds&#39;</span><span class="p">)</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
+                            <div id="Index.fields" class="classattr">
+                                <div class="attr variable">
+            <span class="name">fields</span>
+
+        
+    </div>
+    <a class="headerlink" href="#Index.fields"></a>
+    
+    
+
+                            </div>
+                            <div id="Index.index_type" class="classattr">
+                                <div class="attr variable">
+            <span class="name">index_type</span>
+
+        
+    </div>
+    <a class="headerlink" href="#Index.index_type"></a>
+    
+    
+
+                            </div>
+                            <div id="Index.name" class="classattr">
+                                <div class="attr variable">
+            <span class="name">name</span>
+
+        
+    </div>
+    <a class="headerlink" href="#Index.name"></a>
+    
+    
+
+                            </div>
+                            <div id="Index.expiry_seconds" class="classattr">
+                                <div class="attr variable">
+            <span class="name">expiry_seconds</span>
+
+        
+    </div>
+    <a class="headerlink" href="#Index.expiry_seconds"></a>
+    
+    
+
+                            </div>
+                            <div id="Index.unique" class="classattr">
+                                <div class="attr variable">
+            <span class="name">unique</span>
+
+        
+    </div>
+    <a class="headerlink" href="#Index.unique"></a>
+    
+    
+
+                            </div>
+                </section>
     </main>
 <script>
     function escapeHTML(html) {
@@ -304,7 +421,7 @@ bin/build.sh
                 script.async = true;
                 script.onload = () => resolve(window.pdocSearch);
                 script.onerror = (e) => reject(e);
-                script.src = "search.js";
+                script.src = "../../search.js";
                 document.getElementsByTagName("head")[0].appendChild(script);
             });
         } catch (e) {
@@ -346,7 +463,7 @@ bin/build.sh
             }
             for (let result of results.slice(0, 10)) {
                 let doc = result.doc;
-                let url = `${doc.modulename.replaceAll(".", "/")}.html`;
+                let url = `../../${doc.modulename.replaceAll(".", "/")}.html`;
                 if (doc.qualname) {
                     url += `#${doc.qualname}`;
                 }

@@ -5,12 +5,10 @@ import textwrap
 
 from IPython.display import display, display_svg, HTML, Markdown, Latex, SVG
 from pygments import highlight
-from pygments.lexers import PythonLexer
 from pygments.lexers import get_lexer_by_name
-from pygments.lexers.data import JsonLexer
 from pygments.formatters import HtmlFormatter
 from jupyterlab_pygments import JupyterStyle
-import qgrid
+# import qgrid
 
 from .str_util import squish_text
 
@@ -120,7 +118,7 @@ def vertically(*items):
 # Add escape characters to string to avoid marking down:
 def escape_md(obj):
   md = str(obj)
-  return md.replace('_', '\_')
+  return md.replace('_', "\\_")
 
 def table_header_md(cols):
   col_names = cols.values() if hasattr(cols, 'values') else cols
@@ -163,29 +161,29 @@ def pretty(code, markdown=True, format=PrettyFormats.python, render=True):
   html = f'<style>{css}</style><div class="highlight">{html}</div>'
   return display_html(html) if markdown else html
 
-def md_dataframe(df, heading=None, include_index: bool = False, render: bool = True, sortable: bool = False, filterable: bool = False, allrows: bool = False, plain: bool = False):
-
-  if plain:
-    html = df.to_html(index=False)
-    if render:
-      return(HTML(html))
-    else:
-      return html
-  else:
-    min_rows = len(df.index_name) + 2 if allrows else min(MIN_VISIBLE_ROWS, len(df.index_name) + 1)
-    widget = qgrid.show_grid(df, show_toolbar=False, grid_options=dict(
-        forceFitColumns=False,
-        syncColumnCellResize=True,
-        fullWidthRows=False,
-        minVisibleRows=min_rows,
-        sortable=sortable,
-        filterable=filterable,
-    ))
-
-    header = f"## {heading}" if heading else None
-    if render:
-      if header:
-        md(header, render=render)
-      return(widget)
-    else:
-      return widget
+# def md_dataframe(df, heading=None, include_index: bool = False, render: bool = True, sortable: bool = False, filterable: bool = False, allrows: bool = False, plain: bool = False):
+#
+#   if plain:
+#     html = df.to_html(index=False)
+#     if render:
+#       return(HTML(html))
+#     else:
+#       return html
+#   else:
+#     min_rows = len(df.index_name) + 2 if allrows else min(MIN_VISIBLE_ROWS, len(df.index_name) + 1)
+#     widget = qgrid.show_grid(df, show_toolbar=False, grid_options=dict(
+#         forceFitColumns=False,
+#         syncColumnCellResize=True,
+#         fullWidthRows=False,
+#         minVisibleRows=min_rows,
+#         sortable=sortable,
+#         filterable=filterable,
+#     ))
+#
+#     header = f"## {heading}" if heading else None
+#     if render:
+#       if header:
+#         md(header, render=render)
+#       return(widget)
+#     else:
+#       return widget

@@ -3,11 +3,11 @@ import os
 from pathlib import Path
 from typing import Dict, Sequence, List
 
-from python_arango_ogm.db.pao_indexes import Index, IndexTypeEnum
-from python_arango_ogm.db.pao_model_discovery import PAOModelDiscovery
 from python_arango_ogm.db import pao_model
-from python_arango_ogm.utils import str_util
+from python_arango_ogm.db.pao_indexes import Index, IndexTypeEnum
 from python_arango_ogm.db.pao_migration_model import PAOMigrationModel
+from python_arango_ogm.db.pao_model_discovery import PAOModelDiscovery
+from python_arango_ogm.utils import str_util
 
 MIGRATION_FILE_TEMPLATE = """
 def up(db):

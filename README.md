@@ -1,6 +1,23 @@
 # Python Arango OGM
 Python-based package implementing an OGM (Object Graph Model) framework for arango; built on top of [python-arango]([url](https://github.com/arangodb/python-arango/)).  This is somewhat a work-in-progress as I integrate it back into the project from which it was extracted.
-**N.B.** This is extracted from a project that uses Arango heavily.  Obviously, with a graph database, you don't want to be tied too closely to an ORM due to the impedance mismatch between models and graph nodes and edges.  Still to do is to marshall query results into models when necessary for that good old model experience.  That will be done in the coming week(s).  
+**N.B.** This is extracted from a project that uses Arango heavily.  Obviously, with a graph database, you don't want to be tied too closely to an ORM due to the impedance mismatch between models and graph nodes and edges.  Still to do is to marshall query results into models when necessary for that good old model experience.  That will be done in the coming week(s).
+
+<p>
+  <img src="https://github.com/tangledpath/python-arango-ogm/blob/master/pao.png" align="left" width="512"/>
+</p>
+<p>&nbsp</p>
+<p>&nbsp</p>
+<p>&nbsp</p>
+<p>&nbsp</p>
+<p>&nbsp</p>
+<p>&nbsp</p>
+<p>&nbsp</p>
+<p>&nbsp</p>
+<p>&nbsp</p>
+<p>&nbsp</p>
+<p>&nbsp</p>
+<p>&nbsp</p>
+<p>&nbsp</p>
 
 ## Homepage
 https://pypi.org/project/python-arango-ogm/
@@ -105,6 +122,8 @@ You may use your models to perform various queries and commands
 poetry run pdoc python_arango_ogm/
 # Generates to ./docs
 poetry run pdoc python_arango_ogm/ -o ./docs
+# OR (recommended)
+bin/build.sh 
 ```
 
 ### Testing
