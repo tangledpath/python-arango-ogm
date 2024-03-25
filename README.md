@@ -3,7 +3,7 @@ Python-based package implementing an OGM (Object Graph Model) framework for aran
 **N.B.** This is extracted from a project that uses Arango heavily.  Obviously, with a graph database, you don't want to be tied too closely to an ORM due to the impedance mismatch between models and graph nodes and edges.  Still to do is to marshall query results into models when necessary for that good old model experience.  That will be done in the coming week(s).
 
 <p>
-  <img src="https://github.com/tangledpath/csv-batcher/blob/master/csv_batcher.png?raw=true" align="left" width="512"/>
+  <img src="https://raw.githubusercontent.com/tangledpath/python-arango-ogm/master/pao.png" align="left" width="512"/>
 </p>
 <p>&nbsp</p>
 <p>&nbsp</p>
