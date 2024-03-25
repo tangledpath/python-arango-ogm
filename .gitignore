@@ -8,7 +8,6 @@ dist/**/*
 
 .virtualenvs
 ## 3rdparty:
-*.png
 .vscode
 .nova
 
