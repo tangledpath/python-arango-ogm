@@ -3,12 +3,13 @@ from typing import Any, Dict, Sequence, Literal
 import uuid
 
 from arango import ArangoClient
+from loguru import logger
 
 from python_arango_ogm.db.pao_db_base import PAODBBase
 from python_arango_ogm.db.pao_model_discovery import PAOModelDiscovery
 from python_arango_ogm.db.pao_queries import PAOQueries
 from python_arango_ogm.db.pao_migration_model import PAOMigrationModel
-from python_arango_ogm.utils.logger import logging
+
 from python_arango_ogm.utils.singleton import Singleton
 
 
@@ -39,7 +40,7 @@ class PAODatabase(PAODBBase):
 
         # Connect to "_system" database as root user.
         # This returns an API wrapper for "_system" database.
-        # logging.debug(f"Connecting to system DB with {root_user}:{root_password}...")
+        # logger.debug(f"Connecting to system DB with {root_user}:{root_password}...")
         self.sys_db = self.client.db('_system', username=root_user, password=root_password)
 
         self.db = None
@@ -83,7 +84,7 @@ class PAODatabase(PAODBBase):
         discoverer = PAOModelDiscovery()
         model_hash: Dict[str, any] = discoverer.discover()
         for m, model in model_hash.items():
-            logging.debug(f"Injecting DB into model {m}")
+            logger.debug(f"Injecting DB into model {m}")
             model.db = self
 
         # Inject into built-in models:
@@ -107,7 +108,7 @@ class PAODatabase(PAODBBase):
         lookup_filter = self._format_lookup_filter(lookup_key_dict)
         aql = PAOQueries.AQL_QUERY_RELATED_EDGES.format(lookup_filter=lookup_filter)
         edge_collection_name = f"{collection_name}__{association_collection_name}"
-        logging.debug(f"Association query on [{collection_name}]->[{edge_collection_name}] [aql]")
+        logger.debug(f"Association query on [{collection_name}]->[{edge_collection_name}] [aql]")
         cursor = self.db.aql.execute(aql, count=True, batch_size=10, bind_vars={
             '@collection': collection_name,
             '@edge_collection': edge_collection_name
@@ -123,7 +124,7 @@ class PAODatabase(PAODBBase):
         lookup_filter = self._format_lookup_filter(lookup_key_dict)
         aql = PAOQueries.AQL_QUERY_RELATED_VERTICES.format(lookup_filter=lookup_filter)
         edge_collection_name = f"{collection_name}__{association_collection_name}"
-        logging.debug(f"Association query on [{collection_name}]->[{edge_collection_name}] [aql]")
+        logger.debug(f"Association query on [{collection_name}]->[{edge_collection_name}] [aql]")
         cursor = self.db.aql.execute(aql, count=True, batch_size=10, bind_vars={
             '@collection': collection_name,
             '@edge_collection': edge_collection_name,
@@ -150,7 +151,7 @@ class PAODatabase(PAODBBase):
         lookup_filter = self._format_lookup_filter({"_key": key})
         aql = PAOQueries.AQL_REMOVE_BY_ATTRS.format(lookup_filter=lookup_filter)
 
-        logging.debug(f"REMOVE query: [{aql}]")
+        logger.debug(f"REMOVE query: [{aql}]")
         cursor = self.db.aql.execute(aql, count=True, bind_vars={'@collection': collection_name})
         return self._cursor_doc_generator(cursor)
 
@@ -168,11 +169,11 @@ class PAODatabase(PAODBBase):
         (ASC, DESC): :param sort_key_dict: A dictionary of keys by which to sort documents.  Values specify
         direction: [ASC, DESC, '']
         """
-        logging.debug(f"LOOKUP:{lookup_key_dict} and SORT:{sort_key_dict}")
+        logger.debug(f"LOOKUP:{lookup_key_dict} and SORT:{sort_key_dict}")
         lookup_filter = self._format_lookup_filter(lookup_key_dict)
         sort_by = self._format_sort(sort_key_dict)
         aql = PAOQueries.AQL_QUERY_BY_ATTRS.format(lookup_filter=lookup_filter, sort_by=sort_by)
-        logging.debug(f"LOOKUP query: {aql}")
+        logger.debug(f"LOOKUP query: {aql}")
         cursor = self.db.aql.execute(aql, count=True, bind_vars={'@collection': collection_name})
         return self._cursor_doc_generator(cursor)
 
@@ -197,9 +198,9 @@ class PAODatabase(PAODBBase):
         new_doc = self.__autogen_keys(collection_name, doc)
         insert_attrs = self._format_query_attrs(new_doc)
         aql = PAOQueries.AQL_INSERT_DOC.format(insert_attrs=insert_attrs)
-        logging.debug(f"INSERT QUERY: {aql}: {insert_attrs}")
+        logger.debug(f"INSERT QUERY: {aql}: {insert_attrs}")
         inserted_docs = self.db.aql.execute(aql, count=True, bind_vars={'@collection': collection_name})
-        logging.debug(f"inserted_docs: {inserted_docs.count()}")
+        logger.debug(f"inserted_docs: {inserted_docs.count()}")
         if not inserted_docs.count():
             raise RuntimeError(f"Error: collection_name document {doc} was not inserted.")
 
@@ -248,18 +249,18 @@ class PAODatabase(PAODBBase):
         insert_attrs = self._format_query_attrs(new_doc)  # str(new_doc)[1:-1]
         update_attrs = self._format_query_attrs(update_doc)  # str(update_attrs)[1:-1]
 
-        logging.debug(f"key_attrs: {key_attrs}")
-        logging.debug(f"insert_attrs: {insert_attrs}")
-        logging.debug(f"update_attrs: {update_attrs}")
+        logger.debug(f"key_attrs: {key_attrs}")
+        logger.debug(f"insert_attrs: {insert_attrs}")
+        logger.debug(f"update_attrs: {update_attrs}")
 
         upsert = PAOQueries.AQL_UPSERT_DOC.format(
             key_attrs=key_attrs,
             insert_attrs=insert_attrs,
             update_attrs=update_attrs)
 
-        logging.debug(f"UPSERT QUERY: {upsert}")
+        logger.debug(f"UPSERT QUERY: {upsert}")
         upserted_docs = self.db.aql.execute(upsert, count=True, bind_vars={'@collection': collection_name})
-        logging.debug(f"upserted_docs: {upserted_docs.count()}")
+        logger.debug(f"upserted_docs: {upserted_docs.count()}")
         if not upserted_docs.count():
             raise RuntimeError(f"Error: collection_name document {doc} was not upserted.")
 
@@ -307,7 +308,7 @@ class PAODatabase(PAODBBase):
     def _cursor_doc_generator(cursor):
         while True:
             # batch_items = cursor.batch()
-            # logging.debug(f"batch_items", batch_items)
+            # logger.debug(f"batch_items", batch_items)
             for doc in cursor.batch():
                 yield doc
             if not cursor.has_more():

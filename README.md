@@ -110,10 +110,10 @@ You may use your models to perform various queries and commands
 **TODO**: document this more
 
 ## Development
-### Linting
+### Linting 
+Linting is done via autopep8
 ```bash
-   ruff check . # Find linting errors
-   ruff check . --fix # Auto-fix linting errors (where possible)
+bin/lint.sh
 ```
 
 ### Documentation
